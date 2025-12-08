@@ -22,6 +22,16 @@
                 <ul class="navbar-nav ms-auto">
 
                     @auth
+                     @if(Auth::user()->role == 'student')
+                        <a class="nav-link" href="{{ route('provider.apply') }}">Become Provider</a>
+                    @endif
+                    @if(Auth::user()->role == 'admin')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.provider.applications') }}">
+                                Provider Applications
+                            </a>
+                        </li>
+                    @endif
                         <li class="nav-item">
                             <a class="nav-link" href="#">{{ Auth::user()->name }}</a>
                         </li>

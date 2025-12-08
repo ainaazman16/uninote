@@ -29,6 +29,32 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/provider/dashboard', [ProviderDashboardController::class, 'index'])->name('provider.dashboard');
 });
 
+//Provider Application Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/provider/apply', [App\Http\Controllers\ProviderApplicationController::class, 'showForm'])->name('provider.apply');
+    Route::post('/provider/apply', [App\Http\Controllers\ProviderApplicationController::class, 'submit'])->name('provider.apply.submit');
+});
+
+//Admin Provider Approval Routes
+Route::middleware(['auth'])->group(function () {
+
+    
+    Route::middleware('admin')->group(function () {
+
+        Route::get('/admin/provider-applications', 
+            [App\Http\Controllers\AdminProviderApprovalController::class, 'index'])
+            ->name('admin.provider.applications');
+
+        Route::post('/admin/provider-applications/{id}/approve', 
+            [App\Http\Controllers\AdminProviderApprovalController::class, 'approve'])
+            ->name('admin.provider.approve');
+
+        Route::post('/admin/provider-applications/{id}/reject', 
+            [App\Http\Controllers\AdminProviderApprovalController::class, 'reject'])
+            ->name('admin.provider.reject');
+    });
+});
+
 
 // Route::middleware(['auth','provider'])->group(function () {
 //     Route::get('/provider/notes/create', [NoteController::class, 'create'])->name('notes.create');

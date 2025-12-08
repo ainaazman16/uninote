@@ -53,6 +53,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class);
     }
-
+    public function providerApplication()
+    {
+        return $this->hasOne(ProviderApplication::class);
+    }
 
 }
