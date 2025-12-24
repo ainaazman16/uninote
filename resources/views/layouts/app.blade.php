@@ -2,17 +2,29 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title ?? 'StudyHive' }}</title>
+    <title>{{ $title ?? 'UniNote' }}</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Navbar -->
+   <!-- Navbar -->
+@if(request()->is('login') || request()->is('register'))
+
+    <!-- Transparent Navbar for Auth Pages -->
+    <nav class="navbar navbar-expand-lg navbar-light position-absolute top-0 w-100" style="background: transparent; box-shadow: none;">
+        <div class="container d-flex justify-content-center">
+            <a class="navbar-brand text-white fw-bold" href="{{ url('/') }}" style="font-size: 28px;">
+                EduHive
+            </a>
+        </div>
+    </nav>
+@else
+    <!-- Normal Dark Navbar for Logged In Pages -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">StudyHive</a>
+            <a class="navbar-brand" href="{{ url('/') }}">UniNote</a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
                 <span class="navbar-toggler-icon"></span>
@@ -24,22 +36,37 @@
                     @auth
                      @if(Auth::user()->role == 'student')
                         <a class="nav-link" href="{{ route('provider.apply') }}">Become Provider</a>
+
+                        <a href="{{ route('profile.show', auth()->id()) }}"
+                        class="btn btn-outline-primary me-2">
+                        My Profile
+                        </a>
                     @endif
+
                     @if(Auth::user()->role == 'admin')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.provider.applications') }}">
                                 Provider Applications
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">Admin Dashboard</a>
+                        </li>
                     @endif
+
                         <li class="nav-item">
                             <a class="nav-link" href="#">{{ Auth::user()->name }}</a>
                         </li>
 
                         <li class="nav-item">
-                            <form method="POST" action="{{ route('logout') }}">
+                            <a href="{{ route('logout') }}"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Log Out
+                            </a>
+
+                            <form id="logout-form" method="POST" action="{{ route('logout') }}" class="d-none">
                                 @csrf
-                                <button class="btn btn-outline-light btn-sm">Logout</button>
                             </form>
                         </li>
                     @endauth
@@ -53,11 +80,19 @@
             </div>
         </div>
     </nav>
+@endif
 
     <!-- Main content -->
+    @if(request()->is('login') || request()->is('register'))
+    {{-- No container for auth pages --}}
+    @yield('content')
+@else
+    {{-- Normal pages use container --}}
     <div class="container mb-5">
         @yield('content')
     </div>
+@endif
+
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

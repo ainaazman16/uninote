@@ -13,20 +13,25 @@ class ProviderMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
 {
     $user = auth()->user();
 
     if (!$user || $user->role !== 'provider') {
-        return redirect('/')->with('error', 'Access denied. Providers only.');
+        return redirect('/login');
     }
 
-    // Check provider record exists and approved
-    if (!$user->provider || $user->provider->status !== 'approved') {
-        return redirect('/')->with('error', 'Your provider account is not approved yet.');
+    if (!$user->provider) {
+        return redirect('/dashboard')->with('error', 'Provider profile not found.');
+    }
+
+    if ($user->provider->status !== 'approved') {
+        return redirect('/dashboard')->with('error', 'Provider account not approved yet.');
     }
 
     return $next($request);
 }
+
+    
 
 }

@@ -5,7 +5,7 @@
 <div class="text-center py-5">
 
     <h1 class="display-4 fw-bold mb-3">
-        Welcome to StudyHive
+        Welcome to EduHive
     </h1>
 
     <p class="lead text-muted mb-4">
@@ -23,10 +23,21 @@
     @auth
         <div class="mt-4">
             <p class="mb-2">You are logged in as <strong>{{ Auth::user()->name }}</strong></p>
-
-            <a href="{{ url('/dashboard') }}" class="btn btn-primary btn-lg px-4">
+            @auth
+                @if (Auth::user()->role ==='provider')
+                    <a href="{{ url('/provider/dashboard') }}" class="btn btn-primary btn-lg px-4">
                 Go to Dashboard
             </a>
+                @elseif (Auth::user()->role ==='admin')
+                    <a href="{{ url('/admin/dashboard') }}" class="btn btn-primary btn-lg px-4">
+                Go to Dashboard
+            </a>
+                @else
+                    <a href="{{ url('/dashboard') }}" class="btn btn-primary btn-lg px-4">
+                Go to Dashboard
+            </a>
+                @endif
+            @endauth
         </div>
     @endauth
 

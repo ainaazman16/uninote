@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Provider;
+use App\Models\Wallet;
 
 class User extends Authenticatable
 {
@@ -18,10 +20,16 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    'name',
+    'email',
+    'password',
+    'university',
+    'programme',
+    'year_of_study',
+    'bio',
+    'profile_photo',
+];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -53,6 +61,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class);
     }
+    public function wallet()
+{
+    return $this->hasOne(Wallet::class);
+}
+
     public function providerApplication()
     {
         return $this->hasOne(ProviderApplication::class);

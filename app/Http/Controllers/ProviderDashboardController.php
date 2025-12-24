@@ -3,23 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use Illuminate\Support\Facades\Auth;
 
 class ProviderDashboardController extends Controller
 {
+    
     public function index()
     {
-        $provider = auth()->user()->provider;
+        $providerId = Auth::id();
 
-        $totalNotes = Note::where('provider_id', $provider->id)->count();
-        $approvedNotes = Note::where('provider_id', $provider->id)->where('status', 'approved')->count();
-        $pendingNotes = Note::where('provider_id', $provider->id)->where('status', 'pending')->count();
-        $rejectedNotes = Note::where('provider_id', $provider->id)->where('status', 'rejected')->count();
+        $totalNotes = Note::where('provider_id', $providerId)->count();
+        $approvedNotes = Note::where('provider_id', $providerId)->where('status', 'approved')->count();
+        $pendingNotes = Note::where('provider_id', $providerId)->where('status', 'pending')->count();
+        $rejectedNotes = Note::where('provider_id', $providerId)->where('status', 'rejected')->count();
 
-        return view('provider.dashboard.index', compact(
+        $totalDownloads = Note::where('provider_id', $providerId)->sum('download_count');
+
+        return view('provider.dashboard', compact(
             'totalNotes',
             'approvedNotes',
             'pendingNotes',
-            'rejectedNotes'
+            'rejectedNotes',
+            'totalDownloads'
         ));
+        
     }
 }

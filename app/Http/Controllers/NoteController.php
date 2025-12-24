@@ -3,41 +3,53 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Note;
+use App\Models\Subject;
+use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
 {
+    public function index()
+    {
+        $notes = Note::where('provider_id', Auth::user()->provider->id)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+
+        return view('provider.notes.index', compact('notes'));
+    }
+
     public function create()
     {
         // Show form to create a new note
-        $subjects = \App\Models\Subject::all();
+        $subjects = Subject::all();
          return view('provider.notes.create', compact('subjects'));
          
     }
 
     public function store(Request $request)
-    {
-        // Handle storing the new note
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'subject_id' => 'required|exists:subjects,id',
-            'file' => 'required|mimes:pdf,doc,docx|max:20480', // max 20MB
-            'description' => 'nullable|string',
-            'is_premium' => 'boolean',
-        ]);
+{
+    $request->validate([
+        'title'       => 'required|max:255',
+        'description' => 'nullable|string',
+        'subject_id'  => 'required|exists:subjects,id',
+        'file'        => 'required|mimes:pdf,doc,docx,png,jpg,jpeg|max:5120',
+        'is_premium'  => 'nullable|boolean'
+    ]);
 
-        //upload file to storage
-        $filePath = $request_>file('file')->store('notes', 'public');
+    // Upload file
+    $path = $request->file('file')->store('notes', 'public');
 
-        \app\Models\Note::create([
-            'provider_id' => auth()->user()->provider->id,
-            'subject_id' => $request->input('subject_id'),
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-            'file_path' => $filePath,
-            'is_premium' => $request-> $request->is_premium ?? false,
-            'status' => 'pending',
-        ]);
+    Note::create([
+        'provider_id'=> Auth::user()->provider->id,
+        'subject_id'  => $request->subject_id,
+        'title'       => $request->title,
+        'description' => $request->description,
+        'file_path'   => $path,
+        'is_premium'  => $request->is_premium ? 1 : 0,
+        'status'      => 'pending',
+    ]);
 
-        return redirect()->route('notes.create')->with('success','Note uploaded and sent for approval.');
-    }
+    return redirect()->route('provider.notes.index')
+                     ->with('success', 'Note uploaded! Waiting for admin approval.');
+}
 }

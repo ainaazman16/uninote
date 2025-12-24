@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Models\Wallet;
 
 class RegisteredUserController extends Controller
 {
@@ -43,6 +44,10 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        Wallet::create([
+            'user_id' => $user->id,
+            'balance' => 20 // free starting credits
+        ]);
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
