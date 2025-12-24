@@ -1,3 +1,31 @@
+# Uninote
+
+Uninote is a Laravel 12 application that lets university students share and access study notes with built-in moderation. It supports three roles:
+
+- **Students** browse approved notes by subject, view provider profiles, and download free notes.
+- **Providers** apply for approval, upload subject-tagged notes (PDF/Doc/Image), and track approval status plus download counts.
+- **Admins** review provider applications, approve or reject uploaded notes, and inspect user profiles.
+
+## Feature highlights
+- Authentication and enriched profiles (university, programme, year, photo) via Laravel Breeze.
+- Provider application workflow with status history and admin feedback.
+- Note management with subject tagging, premium flag, and admin approval queue.
+- Student catalogue with subject filters and secure downloads of approved, non-premium notes.
+- Provider dashboard metrics (totals for notes by status and aggregate downloads).
+
+## Tech stack
+- **Backend:** PHP 8.2+, Laravel 12
+- **Frontend:** Vite, Tailwind CSS, Alpine.js
+- **Storage:** Public disk for uploads; relational DB (MySQL or SQLite for local development).
+
+## Getting started
+1. Install PHP dependencies: `composer install`.
+2. Copy environment: `cp .env.example .env`, configure your database (SQLite works locally), then `php artisan key:generate`.
+3. Prepare data: create the database file/schema and run `php artisan migrate`.
+4. Install JS assets: `npm install` then `npm run dev` (or `npm run build` for production).
+5. Run the app: `php artisan serve` and visit `/` (you’ll be redirected to login).
+6. Run tests after setup: `php artisan test`.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
