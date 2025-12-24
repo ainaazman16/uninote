@@ -1,5 +1,19 @@
 @extends('layouts.app')
+<style>
+    /* Makes the button lift up slightly on hover */
+    .hover-elevate {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .hover-elevate:hover {
+        transform: translateY(-2px); /* Moves up 2 pixels */
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important; /* Adds a soft shadow underneath */
+    }
 
+    /* Optional: Makes the status text looked spaced out and premium */
+    .tracking-wide {
+        letter-spacing: 0.1em;
+    }
+</style>
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
