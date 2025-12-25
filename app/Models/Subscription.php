@@ -8,8 +8,27 @@ class Subscription extends Model
     protected $fillable = [
         'student_id',
         'provider_id',
-        'status',
-        'started_at',
-        'ended_at'
+        'price',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'student_id');
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class);
+    }
+
+     // 30-day expiry
+    public function isActive()
+    {
+        return $this->created_at->addDays(30)->isFuture();
+    }
+
+    public function expiresAt()
+    {
+        return $this->created_at->addDays(30);
+    }
 }

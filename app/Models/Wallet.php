@@ -15,4 +15,12 @@ class Wallet extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public static function ensure(User $user)
+{
+    return self::firstOrCreate(
+        ['user_id' => $user->id],
+        ['balance' => 0]
+    );
+}
+
 }

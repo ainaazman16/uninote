@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Models\Subject;
+use App\Models\Subscription;
 use Illuminate\Support\Facades\Auth;
 
 class NoteController extends Controller
@@ -14,6 +15,17 @@ class NoteController extends Controller
         $notes = Note::where('provider_id', Auth::user()->provider->id)
                     ->orderBy('created_at', 'desc')
                     ->get();
+
+         $subscription = Subscription::where('student_id', auth()->id())
+        ->where('provider_id', Auth::user()->provider->id)
+        ->latest()
+        ->first();
+
+    if (!$subscription || !$subscription->isActive()) {
+        return redirect()
+            ->route('student.dashboard')
+            ->with('error', 'Your subscription has expired.');
+    }
 
         return view('provider.notes.index', compact('notes'));
     }

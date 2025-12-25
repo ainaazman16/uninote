@@ -93,6 +93,7 @@
                     <span class="menu-text">Become Provider</span>
                 </a>
             </li>
+
         </ul>
 
     </div>
@@ -112,11 +113,42 @@
             </div>
 
             <div class="col-md-4">
-                <div class="dashboard-card">
-                    <h5>Subscribed Providers</h5>
-                    <h2 class="fw-bold">3</h2>
+    <div class="dashboard-card">
+        <h5>Subscribed Providers</h5>
+        <h2 class="fw-bold">{{ $totalSubscriptions }}</h2>
+
+       @if($subscriptions->count())
+    <ul class="list-unstyled mt-2">
+        @foreach($subscriptions as $sub)
+            <li class="mb-2">
+                <strong>{{ $sub->provider->name }}</strong><br>
+
+                <small class="text-muted">
+                    Expires on {{ $sub->expiresAt()->format('d M Y') }}
+                </small>
+
+                @if($sub->isActive())
+                    <span class="badge bg-success ms-2">Active</span>
+                @else
+                    <span class="badge bg-danger ms-2">Expired</span>
+                @endif
+
+                <div class="mt-1">
+                    <a href="{{ route('student.providers.show', $sub->provider) }}"
+                       class="btn btn-sm btn-outline-primary">
+                        View Provider
+                    </a>
                 </div>
-            </div>
+            </li>
+        @endforeach
+    </ul>
+@else
+    <p class="text-muted small mt-2">You haven’t subscribed to any provider yet.</p>
+@endif
+
+    </div>
+</div>
+
 
             <div class="col-md-4">
                 <div class="dashboard-card">
@@ -126,6 +158,41 @@
             </div>
 
         </div>
+        <hr class="my-4">
+
+<h4 class="fw-bold mb-3">Find Providers</h4>
+
+<form action="{{ route('student.providers.search') }}" method="GET" class="mb-4">
+    <div class="input-group">
+        <input type="text"
+               name="query"
+               class="form-control"
+               placeholder="Search by provider name or email"
+               value="{{ request('query') }}">
+        <button class="btn btn-dark">Search</button>
+    </div>
+</form>
+
+@if(isset($providers) && $providers->count())
+    <div class="row g-3">
+        @foreach($providers as $provider)
+            <div class="col-md-4">
+                <div class="dashboard-card">
+                    <h5>{{ $provider->name }}</h5>
+                    <p class="text-muted">{{ $provider->email }}</p>
+
+                    <a href="{{ route('providers.show', $provider->id) }}"
+                       class="btn btn-outline-primary btn-sm">
+                        View Profile
+                    </a>
+                </div>
+            </div>
+        @endforeach
+    </div>
+@elseif(request()->has('query'))
+    <p class="text-muted">No providers found.</p>
+@endif
+
 
     </div>
 

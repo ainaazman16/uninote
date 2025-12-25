@@ -57,18 +57,31 @@ class User extends Authenticatable
     {
         return $this->hasOne(Provider::class);
     }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
     public function wallet()
 {
     return $this->hasOne(Wallet::class);
+}
+    public function subscriptions()
+{
+    return $this->hasMany(Subscription::class, 'student_id');
 }
 
     public function providerApplication()
     {
         return $this->hasOne(ProviderApplication::class);
     }
+
+    public function providerSubscriptions()
+{
+    return $this->hasMany(Subscription::class, 'provider_id');
+}
+    protected static function booted()
+        {
+            static::created(function ($user) {
+                $user->wallet()->create(['balance' => 0]);
+            });
+        }
+
+
 
 }

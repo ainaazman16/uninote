@@ -13,7 +13,8 @@ class StudentNoteController extends Controller
     {
         $subjects = Subject::all();
 
-        $notes = Note::where('status', 'approved')
+        $notes = Note::with(['provider.user', 'subject'])
+            ->where('status', 'approved')
             ->when($request->subject_id, function ($query) use ($request) {
                 $query->where('subject_id', $request->subject_id);
             })

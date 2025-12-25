@@ -2,12 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NoteController;
+
 use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AdminProviderApprovalController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ProviderDashboardController;
+use App\Http\Controllers\StudentDashboardController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SubscriptionController;
+use App\Http\Controllers\ProviderController;
 
 // Route::get('/', function () {
 //     return 'HOME PAGE TEST';
@@ -51,6 +55,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/providers/{user}', [App\Http\Controllers\StudentProviderController::class, 'show'])
     ->name('student.providers.show');
 
+    Route::get('/providers', [ProviderController::class, 'index'])
+    ->name('provider.index');
+
+    Route::get('/providers/{provider}', [ProviderController::class, 'show'])
+    ->name('providers.show');
+
+    Route::get('/student/providers/search',
+        [StudentDashboardController::class, 'searchProviders']
+    )->name('student.providers.search');
+
+    Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
+        ->name('dashboard');
 
 });
 
@@ -77,6 +93,10 @@ Route::middleware(['auth', 'provider'])->group(function () {
     Route::post('/provider/notes', [NoteController::class, 'store'])
         ->name('provider.notes.store');
 
+    Route::post('/subscriptions/{provider}', 
+        [SubscriptionController::class, 'store']
+        )->name('subscriptions.store');
+
 });
 
 Route::middleware('auth')->group(function () {
@@ -93,6 +113,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/provider/apply', [App\Http\Controllers\ProviderApplicationController::class, 'showForm'])->name('provider.apply');
     Route::post('/provider/apply', [App\Http\Controllers\ProviderApplicationController::class, 'submit'])->name('provider.apply.submit');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/subscribe/{provider}', [SubscriptionController::class, 'subscribe'])
+        ->name('subscribe');
+});
+
+Route::post('/subscriptions/{provider}', 
+    [SubscriptionController::class, 'store']
+)->name('subscriptions.store')->middleware('auth');
+
 
 //Admin Provider Approval Routes
 Route::middleware(['auth', 'admin'])->group(function () {
@@ -128,9 +158,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->name('admin.users.show');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 
 // Route::middleware(['auth','provider'])->group(function () {

@@ -25,7 +25,7 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
 
-        $request->validate([
+        $data = $request->validate([
             'profile_photo' => 'nullable|image|max:2048',
             'university'    => 'nullable|string|max:255',
             'programme'     => 'nullable|string|max:255',
@@ -34,20 +34,16 @@ class ProfileController extends Controller
         ]);
 
         if ($request->hasFile('profile_photo')) {
-            $path = $request->file('profile_photo')
-                            ->store('profiles', 'public');
-            $user->profile_photo = $path;
+            $data['profile_photo'] = $request->file('profile_photo')
+                ->store('profiles', 'public');
         }
 
-        $user->update($request->only([
-            'university',
-            'programme',
-            'year_of_study',
-            'bio',
-        ]));
+        $user->fill($data);
+        $user->save();
 
-        return redirect()->route('profile.show', auth()->id())
-    ->with('success', 'Profile updated successfully.');
+        return redirect()
+            ->route('profile.edit')
+            ->with('success', 'Profile updated successfully.');
 
     }
 

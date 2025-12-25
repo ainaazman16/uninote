@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProviderApplication;
 use Illuminate\Http\Request;
+use App\Models\Provider;
+use App\Models\Wallet;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -53,5 +55,22 @@ class ProviderApplicationController extends Controller
 
             return redirect()->back()->with('success', 'Your application has been submitted successfully.');
     }
+
+    public function approve($id)
+{
+    $provider = Provider::findOrFail($id);
+
+    $provider->update([
+        'status' => 'approved',
+    ]);
+
+    // 🔐 Ensure provider has wallet
+    Wallet::firstOrCreate(
+        ['user_id' => $provider->user_id],
+        ['balance' => 0]
+    );
+
+    return back()->with('success', 'Provider approved successfully.');
+}
         
 }

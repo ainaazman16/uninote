@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 class StudentProviderController extends Controller
@@ -13,6 +15,22 @@ class StudentProviderController extends Controller
             abort(404);
         }
 
-        return view('student.providers.show', compact('user'));
-    }
+         $provider = $user->provider;
+        $notes = $provider->notes()
+            ->where('status', 'approved')
+            ->latest()
+            ->get();
+
+        $isSubscribed = Auth::user()
+            ->subscriptions()
+            ->where('provider_id', $provider->id)
+            ->exists();
+
+        return view('student.providers.show', compact(
+            'user',
+            'provider',
+            'notes',
+            'isSubscribed'
+        ));
+}
 }
