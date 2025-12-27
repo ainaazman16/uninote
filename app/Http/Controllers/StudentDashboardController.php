@@ -51,7 +51,7 @@ class StudentDashboardController extends Controller
         'totalSubscriptions',
         'subscribedProviders',
         'providers',
-        'subscriptions',
+        'subscriptions'
     ));
 }
 

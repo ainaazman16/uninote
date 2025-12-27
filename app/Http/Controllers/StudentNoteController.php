@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Note;
+use App\Models\Subscription;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class StudentNoteController extends Controller
@@ -31,6 +33,25 @@ class StudentNoteController extends Controller
             abort(403);
         }
 
+        // If note is premium, check subscription
+     if ($note->is_premium) {
+        $subscription = Subscription::where('student_id', auth()->id())
+            ->where('provider_id', $note->provider_id)
+            ->where('status', 'active')
+            ->first();
+
+        // // Auto-expire
+        // if ($subscription && $subscription->expires_at->isPast()) {
+        //     $subscription->update(['status' => 'expired']);
+        // }
+
+        if (!$subscription) {
+            return redirect()
+                ->back()
+                ->with('error', 'You must subscribe to access this premium note.');
+        }
+    }
+
         return view('student.notes.show', compact('note'));
     }
 
@@ -41,11 +62,20 @@ class StudentNoteController extends Controller
             abort (403);
         }
 
-        //Premium logic
-        if ($note->is_premium){
-            return back()->with('error', 'This is a premium note. Please subscribe to download.');
-        }
+        if ($note->is_premium) {
 
-        return Storage::disk('public')->download($note->file_path);
+        $subscription = Subscription::where('student_id', Auth::id())
+            ->where('provider_id', $note->provider_id)
+            ->where('status', 'active')
+            ->first();
+
+        if (!$subscription) {
+            abort(403);
+        }
+    }
+
+        return response()->download(
+        storage_path('app/public/' . $note->file_path)
+    );
     }
 }

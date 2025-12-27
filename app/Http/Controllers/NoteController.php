@@ -13,19 +13,10 @@ class NoteController extends Controller
     public function index()
     {
         $notes = Note::where('provider_id', Auth::user()->provider->id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-         $subscription = Subscription::where('student_id', auth()->id())
-        ->where('provider_id', Auth::user()->provider->id)
-        ->latest()
-        ->first();
-
-    if (!$subscription || !$subscription->isActive()) {
-        return redirect()
-            ->route('student.dashboard')
-            ->with('error', 'Your subscription has expired.');
-    }
+    return view('provider.notes.index', compact('notes'));
 
         return view('provider.notes.index', compact('notes'));
     }
@@ -57,7 +48,7 @@ class NoteController extends Controller
         'title'       => $request->title,
         'description' => $request->description,
         'file_path'   => $path,
-        'is_premium'  => $request->is_premium ? 1 : 0,
+        'is_premium'  => $request->is_premium, // 0 or 1
         'status'      => 'pending',
     ]);
 

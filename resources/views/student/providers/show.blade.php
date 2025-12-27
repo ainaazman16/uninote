@@ -25,9 +25,22 @@
 
             <div>
                 @if($isSubscribed)
-                    <button class="btn btn-success" disabled>
+                    <button class="btn btn-success mb-1" disabled>
                         ✔ Subscribed
                     </button>
+
+                    <span class="badge bg-success mb-2">
+                        {{ $daysRemaining }} days remaining
+                    </span>
+
+                    <form method="POST"
+                        action="{{ route('subscriptions.cancel', $subscription->id) }}"
+                        onsubmit="return confirm('Cancel this subscription?');">
+                        @csrf
+                        <button class="btn btn-danger btn-sm">
+                            Cancel Subscription
+                        </button>
+                    </form>
                 @else
                     <form method="POST" action="{{ route('subscriptions.store', $provider->id) }}">
                         @csrf
@@ -36,6 +49,7 @@
                         </button>
                     </form>
                 @endif
+
             </div>
 
         </div>

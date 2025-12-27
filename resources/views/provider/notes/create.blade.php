@@ -49,11 +49,19 @@
                 </div>
 
                 <div class="form-check mb-3">
-                    <input class="form-check-input" type="checkbox" name="is_premium" id="premiumCheck">
+                    <input type="hidden" name="is_premium" value="0">
+
+                    <input class="form-check-input"
+                        type="checkbox"
+                        name="is_premium"
+                        id="premiumCheck"
+                        value="1">
+
                     <label class="form-check-label" for="premiumCheck">
                         Mark as Premium
                     </label>
                 </div>
+
 
                 <button class="btn btn-primary w-100">Upload Note</button>
 

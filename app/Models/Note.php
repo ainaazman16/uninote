@@ -24,4 +24,14 @@ class Note extends Model
     {
         return $this->belongsTo(Subject::class);
     }
+    public function isSubscribedBy($user)
+        {
+            if (!$user) return false;
+
+            return Subscription::where('student_id', $user->id)
+                ->where('provider_id', $this->provider_id)
+                ->where('status', 'active')
+                ->exists();
+        }
+
 }

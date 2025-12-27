@@ -93,6 +93,21 @@
                     <span class="menu-text">Become Provider</span>
                 </a>
             </li>
+            <li class="mb-3">
+                        <a href="{{ route('student.transactions.index') }}"
+                        class="text-decoration-none text-dark d-flex align-items-center">
+                            <span class="me-2">💳</span>
+                            <span class="menu-text">Transaction History</span>
+                        </a>
+                    </li>
+                    <li class="mb-3">
+            <a href="{{ route('wallet.index') }}" class="text-decoration-none text-dark d-flex align-items-center">
+                <span class="me-2">💰</span>
+                <span class="menu-text">My Wallet</span>
+            </a>
+        </li>
+
+
 
         </ul>
 

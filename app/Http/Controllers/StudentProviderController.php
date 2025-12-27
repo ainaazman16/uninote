@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Subscription;
 use App\Models\User;
 
 class StudentProviderController extends Controller
@@ -21,16 +22,28 @@ class StudentProviderController extends Controller
             ->latest()
             ->get();
 
-        $isSubscribed = Auth::user()
-            ->subscriptions()
+       $subscription = Subscription::where('student_id', auth()->id())
             ->where('provider_id', $provider->id)
-            ->exists();
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('ended_at')
+                ->orWhere('ended_at', '>', now());
+            })
+            ->latest()
+            ->first();
+
+        $expiresAt = $subscription ? $subscription->expiresAt() : null;
+        $daysRemaining = $expiresAt ? max(0, now()->diffInDays($expiresAt, false)) : null;
+       
+       $isSubscribed = $subscription && $subscription->isActive();
 
         return view('student.providers.show', compact(
             'user',
             'provider',
             'notes',
-            'isSubscribed'
+            'isSubscribed',
+            'subscription',
+            'daysRemaining'
         ));
 }
 }

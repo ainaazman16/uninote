@@ -63,6 +63,28 @@
             </div>
         </div>
 
+        <!-- Withdrawal Requests -->
+        <div class="col-md-4">
+            <div class="card admin-card text-center">
+                <div class="admin-icon">💰</div>
+                <h5 class="fw-bold">
+    Withdrawal Requests
+    @if($pendingWithdrawals > 0)
+        <span class="badge bg-danger ms-2">
+            {{ $pendingWithdrawals }}
+        </span>
+    @endif
+</h5>
+
+                <p class="text-muted">Approve or reject provider withdrawal requests.</p>
+
+                <a href="{{ route('admin.withdrawals.index') }}" 
+                class="btn btn-warning w-100">
+                    Manage Withdrawals
+                </a>
+            </div>
+        </div>
+
         <!-- Analytics -->
         <div class="col-md-4">
             <div class="card admin-card text-center">

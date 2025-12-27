@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Provider;
 use App\Models\Subscription;
 use App\Models\Wallet;
@@ -66,6 +67,8 @@ class SubscriptionController extends Controller
                 'student_id'  => $student->id,
                 'provider_id' => $provider->id,
                 'price'       => $price,
+                'status' => 'active',
+    'ended_at' => now()->addDays(30),
             ]);
 
             Transaction::create([
@@ -80,4 +83,23 @@ class SubscriptionController extends Controller
 
         return back()->with('success', 'Subscribed successfully!');
     }
+    public function cancel(Subscription $subscription)
+{
+    if ($subscription->student_id !== auth()->id()) {
+        abort(403);
+    }
+
+    if ($subscription->status !== 'active') {
+        return back()->with('error', 'Subscription is not active.');
+    }
+
+    $subscription->update([
+        'status' => 'expired',
+        'ended_at' => now()
+    ]);
+
+    return back()->with('success', 'Subscription cancelled successfully.');
+}
+
+
 }

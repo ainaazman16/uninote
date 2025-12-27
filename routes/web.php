@@ -2,12 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NoteController;
-
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminNoteController;
+use App\Http\Controllers\AdminWithdrawalController;
 use App\Http\Controllers\AdminProviderApprovalController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ProviderDashboardController;
 use App\Http\Controllers\StudentDashboardController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ProviderWithdrawalController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubscriptionController;
@@ -55,6 +59,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/providers/{user}', [App\Http\Controllers\StudentProviderController::class, 'show'])
     ->name('student.providers.show');
 
+    Route::get('/student/transactions', [TransactionController::class, 'index'])
+    ->name('student.transactions.index');
+
     Route::get('/providers', [ProviderController::class, 'index'])
     ->name('provider.index');
 
@@ -67,6 +74,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
         ->name('dashboard');
+
+      Route::get('/wallet', [WalletController::class, 'index'])
+        ->name('wallet.index');
+
+    Route::post('/wallet/topup', [WalletController::class, 'topup'])
+        ->name('wallet.topup');
+
 
 });
 
@@ -92,6 +106,10 @@ Route::middleware(['auth', 'provider'])->group(function () {
 
     Route::post('/provider/notes', [NoteController::class, 'store'])
         ->name('provider.notes.store');
+    
+    Route::post('/provider/withdraw', [ProviderWithdrawalController::class, 'store'])
+    ->name('provider.withdraw');
+
 
     Route::post('/subscriptions/{provider}', 
         [SubscriptionController::class, 'store']
@@ -117,6 +135,10 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::post('/subscribe/{provider}', [SubscriptionController::class, 'subscribe'])
         ->name('subscribe');
+    Route::post('/subscriptions/{subscription}/cancel', 
+        [SubscriptionController::class, 'cancel']
+    )->name('subscriptions.cancel');
+
 });
 
 Route::post('/subscriptions/{provider}', 
@@ -128,9 +150,8 @@ Route::post('/subscriptions/{provider}',
 Route::middleware(['auth', 'admin'])->group(function () {
 
     // Admin dashboard
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
+        ->name('admin.dashboard');
 
     Route::get('/admin/provider-applications', 
         [App\Http\Controllers\AdminProviderApprovalController::class, 'index'])
@@ -156,6 +177,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
         ->name('admin.users.show');
+
+    //Admin withdrawal approval
+      Route::get('/admin/withdrawals', [AdminWithdrawalController::class, 'index'])
+        ->name('admin.withdrawals.index');
+
+    Route::post('/admin/withdrawals/{withdrawal}/approve', [AdminWithdrawalController::class, 'approve'])
+        ->name('admin.withdrawals.approve');
+
+    Route::post('/admin/withdrawals/{withdrawal}/reject', [AdminWithdrawalController::class, 'reject'])
+        ->name('admin.withdrawals.reject');
 });
 
 Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])

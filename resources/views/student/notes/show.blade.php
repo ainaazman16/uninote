@@ -15,6 +15,19 @@
     </div>
 
     {{-- NOTE PREVIEW --}}
+    @if($note->is_premium)
+    <span class="badge bg-warning text-dark mb-2">🔒 Premium Note</span>
+@endif
+
+<h3>{{ $note->title }}</h3>
+
+<p class="text-muted">{{ $note->description }}</p>
+
+<a href="{{ route('student.notes.download', $note->id) }}"
+   class="btn btn-primary">
+    Download Note
+</a>
+
     @if(Str::endsWith($note->file_path, '.pdf'))
         <div class="card shadow-sm">
             <div class="card-body">
