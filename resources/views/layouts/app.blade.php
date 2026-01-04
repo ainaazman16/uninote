@@ -118,6 +118,22 @@
                                                 <i class="bi bi-file-earmark-text me-2 text-danger"></i> Applications
                                             </a>
                                         </li>
+                                        
+                                    @endif
+
+                                    {{-- PROVIDER ROLE SPECIFICS --}}
+                                    @if (Auth::user()->role == 'provider')
+                                        <li>
+                                            <a class="dropdown-item rounded-2 py-2" href="{{ route('profile.show', auth()->id()) }}">
+                                                <i class="bi bi-person me-2 text-secondary"></i> My Profile
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item rounded-2 py-2" href="{{ route('provider.notes.index') }}">
+                                                <i class="bi bi-journal-text me-2 text-secondary"></i> My Notes
+                                            </a>
+                                        </li>
+
                                     @endif
 
                                     <li><hr class="dropdown-divider"></li>

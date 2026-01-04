@@ -23,7 +23,9 @@
                     <th>Premium?</th>
                     <th>Status</th>
                     <th>File</th>
+                    <th>Quiz</th>
                     <th>Uploaded At</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
 
@@ -42,7 +44,37 @@
                             </span>
                         </td>
                         <td><a href="{{ asset('storage/' . $note->file_path) }}" target="_blank">View</a></td>
+                        <td>
+                            @if($note->quiz)
+                                <a href="{{ route('provider.quiz.edit', $note->quiz->id) }}" class="btn btn-sm btn-warning">
+                                    Manage Quiz
+                                </a>
+                            @else
+                                <a href="{{ route('provider.quiz.create', $note->id) }}" class="btn btn-sm btn-outline-primary">
+                                    Add Quiz
+                                </a>
+                            @endif
+
+                        </td>
                         <td>{{ $note->created_at->format('d M Y, H:i') }}</td>
+                        <td class="text-nowrap">
+                            <a href="{{ route('provider.notes.edit', $note->id) }}"
+                            class="btn btn-sm btn-outline-warning">
+                                Edit
+                            </a>
+                            <form method="POST"
+                                action="{{ route('provider.notes.destroy', $note->id) }}"
+                                class="d-inline"
+                                onsubmit="return confirm('Delete this note?')">
+                                @csrf
+                                @method('DELETE')
+
+                                <button class="btn btn-sm btn-outline-danger">
+                                    Delete
+                                </button>
+                            </form>
+
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

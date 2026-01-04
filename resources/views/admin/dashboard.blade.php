@@ -24,7 +24,16 @@
 </style>
 
 <div class="container mt-4">
+    @php
+        $count = auth()->user()->unreadNotifications->count();
+    @endphp
 
+    <a href="{{ route('admin.notifications') }}" class="nav-link">
+        🔔
+        @if($count)
+            <span class="badge bg-danger">{{ $count }}</span>
+        @endif
+    </a>
     <h2 class="fw-bold mb-4">Admin Dashboard</h2>
 
     <div class="row g-4">
@@ -68,19 +77,31 @@
             <div class="card admin-card text-center">
                 <div class="admin-icon">💰</div>
                 <h5 class="fw-bold">
-    Withdrawal Requests
-    @if($pendingWithdrawals > 0)
-        <span class="badge bg-danger ms-2">
-            {{ $pendingWithdrawals }}
-        </span>
-    @endif
-</h5>
+                Withdrawal Requests
+                @if($pendingWithdrawals > 0)
+                    <span class="badge bg-danger ms-2">
+                        {{ $pendingWithdrawals }}
+                    </span>
+                @endif
+            </h5>
 
                 <p class="text-muted">Approve or reject provider withdrawal requests.</p>
 
                 <a href="{{ route('admin.withdrawals.index') }}" 
                 class="btn btn-warning w-100">
                     Manage Withdrawals
+                </a>
+            </div>
+        </div>
+
+        <!-- Ratings & Feedback Moderation -->
+        <div class="col-md-4">
+            <div class="card admin-card text-center">
+                <div class="admin-icon">⭐</div>
+                <h5 class="fw-bold">Ratings & Feedback</h5>
+                <p class="text-muted">Moderate user ratings and feedback.</p>
+                <a href="{{ route('admin.ratings.index') }}" class="btn btn-primary w-100">
+                    Manage Ratings
                 </a>
             </div>
         </div>
@@ -95,15 +116,33 @@
             </div>
         </div>
 
-        <!-- System Settings -->
+        <!-- Wallet Top-Up Approvals -->
         <div class="col-md-4">
             <div class="card admin-card text-center">
-                <div class="admin-icon">⚙️</div>
-                <h5 class="fw-bold">System Settings</h5>
-                <p class="text-muted">Configure system preferences and roles.</p>
-                <a href="#" class="btn btn-secondary w-100 disabled">Coming Soon</a>
+
+                <div class="admin-icon">💳</div>
+
+                <h5 class="fw-bold">
+                    Wallet Top-Ups
+                    @if($pendingTopups > 0)
+                        <span class="badge bg-danger ms-2">
+                            {{ $pendingTopups }}
+                        </span>
+                    @endif
+                </h5>
+
+                <p class="text-muted">
+                    Review student wallet top-up requests.
+                </p>
+
+                <a href="{{ url('/wallet-topups') }}"
+                class="btn btn-success w-100">
+                    Approve Top-Ups
+                </a>
+
             </div>
         </div>
+
 
     </div>
 

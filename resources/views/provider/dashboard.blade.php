@@ -4,10 +4,26 @@
     <div class="container mt-4">
 
         <h2 class="fw-bold mb-4">Provider Dashboard</h2>
-
         {{-- Summary Cards --}}
         <div class="row g-3">
 
+            {{-- Quick Actions --}}
+        <div class="mt-4">
+            <h4 class="fw-bold mb-3">Quick Actions</h4>
+
+            <div class="d-flex gap-3">
+
+                <a href="{{ route('provider.notes.create') }}" class="btn btn-primary">
+                    + Upload New Note
+                </a>
+
+                <a href="{{ route('provider.notes.index') }}" class="btn btn-outline-secondary">
+                    View All Notes
+                </a>
+
+            </div>
+        </div>
+            {{-- Wallet Balance --}}
             <div class="col-md-3">
                 <div class="card shadow-sm border-0">
                     <div class="card-body text-center">
@@ -127,6 +143,46 @@
                 </div>
             </div>
         </div>
+        <h5 class="fw-bold mb-3">Your Notes Performance</h5>
+
+<div class="row g-3">
+    @forelse($notes as $note)
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+
+                    <h6 class="fw-bold mb-1">
+                        {{ $note->title }}
+                    </h6>
+
+                    <p class="text-muted small mb-2">
+                        {{ $note->subject->name ?? 'No subject' }}
+                    </p>
+
+                    {{-- Rating --}}
+                    <div class="mb-1">
+                        @php
+                            $avg = round($note->ratings_avg_rating ?? 0);
+                        @endphp
+
+                        @for($i = 1; $i <= 5; $i++)
+                            <span class="{{ $i <= $avg ? 'text-warning' : 'text-muted' }}">
+                                ★
+                            </span>
+                        @endfor
+
+                        <small class="text-muted">
+                            ({{ $note->ratings_count }} reviews)
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    @empty
+        <p class="text-muted">No notes uploaded yet.</p>
+    @endforelse
+</div>
 
         {{-- Recent Earnings --}}
 <div class="row mt-4">
@@ -165,24 +221,6 @@
         </div>
     </div>
 </div>
-
-
-        {{-- Quick Actions --}}
-        <div class="mt-4">
-            <h4 class="fw-bold mb-3">Quick Actions</h4>
-
-            <div class="d-flex gap-3">
-
-                <a href="{{ route('provider.notes.create') }}" class="btn btn-primary">
-                    + Upload New Note
-                </a>
-
-                <a href="{{ route('provider.notes.index') }}" class="btn btn-outline-secondary">
-                    View All Notes
-                </a>
-
-            </div>
-        </div>
 
     </div>
 @endsection

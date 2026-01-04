@@ -53,13 +53,40 @@
                                 <span class="text-muted">Unknown Provider</span>
                             @endif
                         </p>
+                        
 
                         {{-- Description --}}
                         <p class="small">
                             {{ Str::limit($note->description, 100) }}
                         </p>
+                        
+                        {{-- Rating stars --}}
+                        @php
+                            $avg = round($note->ratings->avg('rating'), 1);
+                            $count = $note->ratings->count();
+                        @endphp
+
+                        @if($count > 0)
+                            <div class="small text-warning">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= floor($avg))
+                                        ★
+                                    @else
+                                        ☆
+                                    @endif
+                                @endfor
+                                <span class="text-muted">
+                                    ({{ $avg }}/5 · {{ $count }})
+                                </span>
+                            </div>
+                        @else
+                            <div class="small text-muted">
+                                No ratings yet
+                            </div>
+                        @endif
                     </div>
 
+                    
                     {{-- Action Button --}}
                     <div class="card-footer bg-white border-0 text-center">
 

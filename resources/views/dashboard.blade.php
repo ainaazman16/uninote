@@ -80,7 +80,7 @@
             </li>
 
             <li class="mb-3">
-                <a href="#" class="text-decoration-none text-dark d-flex align-items-center">
+                <a href="{{ route('student.subscriptions.index') }}" class="text-decoration-none text-dark d-flex align-items-center">
                     <span class="me-2">✨</span>
                     <span class="menu-text">My Subscriptions</span>
                 </a>
@@ -101,7 +101,7 @@
                         </a>
                     </li>
                     <li class="mb-3">
-            <a href="{{ route('wallet.index') }}" class="text-decoration-none text-dark d-flex align-items-center">
+            <a href="{{ route('student.wallet.index') }}" class="text-decoration-none text-dark d-flex align-items-center">
                 <span class="me-2">💰</span>
                 <span class="menu-text">My Wallet</span>
             </a>

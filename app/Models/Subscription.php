@@ -2,7 +2,9 @@
 
 namespace App\Models;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Subscription extends Model
 {
@@ -14,7 +16,11 @@ class Subscription extends Model
         'ended_at',
     ];
 
-    protected $dates = ['started_at','ended_at'];
+    protected $casts = [
+        'ended_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 
     public function student()
     {
@@ -29,8 +35,13 @@ class Subscription extends Model
      // 30-day expiry
     public function isActive()
     {
-         return $this->status === 'active'
-            && ($this->ended_at === null || $this->ended_at->isFuture());
+        $endedAt = $this->ended_at;
+        if (is_string($endedAt)) {
+            $endedAt = Carbon::parse($endedAt);
+        }
+
+        return $this->status === 'active'
+            && (!$endedAt instanceof CarbonInterface || $endedAt->isFuture());
     }
 
     public function expiresAt()
@@ -40,19 +51,24 @@ class Subscription extends Model
 
 public function remainingDays()
     {
-        if (!$this->ended_at) {
+        $endedAt = $this->ended_at;
+        if (is_string($endedAt)) {
+            $endedAt = Carbon::parse($endedAt);
+        }
+
+        if (!$endedAt) {
             return 0;
         }
 
         return max(
         0,
-        Carbon::now()->diffInDays(Carbon::parse($this->ended_at), false)
+        Carbon::now()->diffInDays($endedAt, false)
     );
     }
 
     public function cancel(Subscription $subscription)
 {
-    if ($subscription->student_id !== auth()->id()) {
+    if ($subscription->student_id !== Auth::id()) {
         abort(403);
     }
 
@@ -62,7 +78,7 @@ public function remainingDays()
 
     $subscription->update([
         'status' => 'cancelled',
-        'expires_at' => now() // end immediately
+        'ended_at' => now() // end immediately
     ]);
 
     return back()->with('success', 'Subscription cancelled successfully.');

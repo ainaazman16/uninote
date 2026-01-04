@@ -6,6 +6,7 @@ use App\Models\Note;
 use App\Models\Subscription;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use App\Models\NoteRating;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -27,33 +28,55 @@ class StudentNoteController extends Controller
     }
 
     //View note details
-    public function show(Note $note)
-    {
-        if ($note->status !== 'approved') {
-            abort(403);
-        }
+public function show(Note $note)
+{
+    if ($note->status !== 'approved') {
+        abort(403);
+    }
 
-        // If note is premium, check subscription
-     if ($note->is_premium) {
+    $isSubscribed = false;
+
+    if ($note->is_premium) {
         $subscription = Subscription::where('student_id', auth()->id())
             ->where('provider_id', $note->provider_id)
             ->where('status', 'active')
             ->first();
-
-        // // Auto-expire
-        // if ($subscription && $subscription->expires_at->isPast()) {
-        //     $subscription->update(['status' => 'expired']);
-        // }
 
         if (!$subscription) {
             return redirect()
                 ->back()
                 ->with('error', 'You must subscribe to access this premium note.');
         }
+
+        $isSubscribed = true;
+    } else {
+        $isSubscribed = true;
     }
 
-        return view('student.notes.show', compact('note'));
-    }
+    // 🔹 Fetch ratings + feedback for this note
+    $ratings = NoteRating::where('note_id', $note->id)
+        ->with('student') // relationship: rating → student
+        ->latest()
+        ->get();
+
+    $averageRating = $ratings->avg('rating');
+    $ratingCount   = $ratings->count();
+    
+    // 🔹 Fetch current user's rating (if any)
+    $userRating = NoteRating::where('note_id', $note->id)
+        ->where('student_id', auth()->id())
+        ->first();
+
+    return view('student.notes.show', compact(
+        'note',
+        'isSubscribed',
+        'ratings',
+        'averageRating',
+        'ratingCount',
+        'userRating'
+    ));
+}
+
 
     //Download note file
     public function download(Note $note)

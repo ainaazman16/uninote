@@ -10,16 +10,15 @@ class Transaction extends Model
         'student_id',
         'provider_id',
         'amount',
+        'description',
         'type',
-        'status'
+        'status',
+        'reference',
     ];
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+
     public function provider()
     {
-        return $this->belongsTo(User::class, 'provider_id');
+        return $this->belongsTo(Provider::class, 'provider_id');
     }
 
     public function student()

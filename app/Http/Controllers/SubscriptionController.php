@@ -100,6 +100,21 @@ class SubscriptionController extends Controller
 
     return back()->with('success', 'Subscription cancelled successfully.');
 }
+    public function mySubscriptions()
+    {
+        $subscriptions = Subscription::with(['provider.user'])
+            ->where('student_id', Auth::id())
+            ->where('status', 'active')
+            ->where(function ($q) {
+                $q->whereNull('ended_at')
+                ->orWhere('ended_at', '>', now());
+            })
+            ->latest()
+            ->get();
 
-
+        return view(
+            'student.subscriptions.index',
+            compact('subscriptions')
+        );
+    }
 }

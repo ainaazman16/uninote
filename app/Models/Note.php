@@ -24,6 +24,26 @@ class Note extends Model
     {
         return $this->belongsTo(Subject::class);
     }
+    public function ratings()
+    {
+        return $this->hasMany(NoteRating::class);
+    }
+
+    public function averageRating()
+    {
+        return round($this->ratings()->avg('rating'), 1);
+    }
+
+    public function ratingCount()
+    {
+        return $this->ratings()->count();
+    }
+    public function quiz()
+    {
+        return $this->hasOne(Quiz::class);
+    }
+
+
     public function isSubscribedBy($user)
         {
             if (!$user) return false;

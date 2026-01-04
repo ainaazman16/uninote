@@ -5,13 +5,19 @@ use App\Http\Controllers\NoteController;
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminNoteController;
 use App\Http\Controllers\AdminWithdrawalController;
-use App\Http\Controllers\AdminProviderApprovalController;
+use App\Http\Controllers\AdminNotificationController;
+use App\Http\Controllers\AdminRatingController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\StudentWalletController;
+use App\Http\Controllers\AdminWalletTopupController;
+use App\Http\Controllers\NoteRatingController;
+use App\Http\Controllers\StudentQuizController;
+use App\Http\Controllers\ProviderQuizController;
 use App\Http\Controllers\ProviderDashboardController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProviderWithdrawalController;
-use App\Http\Controllers\WalletController;
+use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubscriptionController;
@@ -68,21 +74,77 @@ Route::middleware('auth')->group(function () {
     Route::get('/providers/{provider}', [ProviderController::class, 'show'])
     ->name('providers.show');
 
+    Route::get(
+    '/student/subscriptions',
+    [SubscriptionController::class, 'mySubscriptions']
+)->name('student.subscriptions.index');
+
+
     Route::get('/student/providers/search',
         [StudentDashboardController::class, 'searchProviders']
     )->name('student.providers.search');
 
     Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
         ->name('dashboard');
+        
 
-      Route::get('/wallet', [WalletController::class, 'index'])
-        ->name('wallet.index');
 
-    Route::post('/wallet/topup', [WalletController::class, 'topup'])
-        ->name('wallet.topup');
+    Route::post('/notes/{note}/rate', [NoteRatingController::class, 'store'])
+    ->middleware('auth')
+    ->name('notes.rate');
+    
+    Route::put('/ratings/{rating}', 
+        [RatingController::class, 'update']
+    )->name('ratings.update');
+
+    Route::delete('/ratings/{rating}', 
+        [RatingController::class, 'destroy']
+    )->name('ratings.destroy');
 
 
 });
+
+Route::prefix('student')->middleware('auth')->group(function () {
+    // Wallet overview
+    Route::get('wallet',
+        [StudentWalletController::class, 'index']
+    )->name('student.wallet.index');
+
+    Route::get('wallet/topup',
+        [StudentWalletController::class, 'create']
+    )->name('student.wallet.topup.form');
+
+    Route::post('wallet/topup',
+        [StudentWalletController::class, 'store']
+    )->name('student.wallet.topup.process');
+
+
+    // Show quiz attempt page
+    Route::get(
+        'notes/{note}/quiz',
+        [StudentQuizController::class, 'attempt']
+    )->name('student.quiz.attempt');
+
+    // Submit quiz
+    Route::post(
+        'notes/{note}/quiz',
+        [StudentQuizController::class, 'submit']
+    )->name('student.quiz.submit');
+
+    // View result
+    Route::get(
+        'quiz-attempts/{attempt}/result',
+        [StudentQuizController::class, 'result']
+    )->name('student.quiz.result');
+
+    
+});
+
+Route::post(
+    '/providers/{provider}/rate',
+    [RatingController::class, 'store']
+)->middleware('auth')->name('providers.rate');
+
 
 // Route::middleware(['auth'])->group(function () {
 //     Route::get('/provider/notes/create', [NoteController::class, 'create'])->name('notes.create');
@@ -106,14 +168,41 @@ Route::middleware(['auth', 'provider'])->group(function () {
 
     Route::post('/provider/notes', [NoteController::class, 'store'])
         ->name('provider.notes.store');
+
+         Route::get('/provider/notes/{note}/edit',
+        [NoteController::class, 'edit']
+    )->name('provider.notes.edit');
+
+    Route::put('/provider/notes/{note}',
+        [NoteController::class, 'update']
+    )->name('provider.notes.update');
+
+    Route::delete('/provider/notes/{note}',
+        [NoteController::class, 'destroy']
+    )->name('provider.notes.destroy');
     
     Route::post('/provider/withdraw', [ProviderWithdrawalController::class, 'store'])
     ->name('provider.withdraw');
 
-
     Route::post('/subscriptions/{provider}', 
         [SubscriptionController::class, 'store']
         )->name('subscriptions.store');
+
+        Route::get('/provider/notes/{note}/quiz/create',
+        [ProviderQuizController::class, 'create']
+    )->name('provider.quiz.create');
+
+    Route::post('/provider/notes/{note}/quiz',
+        [ProviderQuizController::class, 'store']
+    )->name('provider.quiz.store');
+
+    Route::get('/provider/quiz/{quiz}/edit',
+        [ProviderQuizController::class, 'edit']
+    )->name('provider.quiz.edit');
+
+    Route::put('/provider/quiz/{quiz}',
+        [ProviderQuizController::class, 'update']
+    )->name('provider.quiz.update');
 
 });
 
@@ -149,6 +238,9 @@ Route::post('/subscriptions/{provider}',
 //Admin Provider Approval Routes
 Route::middleware(['auth', 'admin'])->group(function () {
 
+    Route::get('/notifications', [AdminNotificationController::class, 'index'])
+        ->name('admin.notifications');
+
     // Admin dashboard
      Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
         ->name('admin.dashboard');
@@ -178,6 +270,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/admin/users/{user}', [AdminUserController::class, 'show'])
         ->name('admin.users.show');
 
+     Route::get('/wallet-topups', [AdminWalletTopupController::class, 'index'])
+        ->name('admin.wallet.topups');
+
+    Route::post('/wallet-topups/{topup}/approve', [AdminWalletTopupController::class, 'approve'])
+        ->name('admin.wallet.topups.approve');
+
+    Route::post('/wallet-topups/{topup}/reject', [AdminWalletTopupController::class, 'reject'])
+        ->name('admin.wallet.topups.reject');
+
+     Route::get('/admin/ratings', [AdminRatingController::class, 'index'])
+        ->name('admin.ratings.index');
+
+    Route::delete('/admin/ratings/{rating}', [AdminRatingController::class, 'destroy'])
+        ->name('admin.ratings.destroy');
+
     //Admin withdrawal approval
       Route::get('/admin/withdrawals', [AdminWithdrawalController::class, 'index'])
         ->name('admin.withdrawals.index');
@@ -200,3 +307,5 @@ Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
 // });
 
 require __DIR__.'/auth.php';
+
+

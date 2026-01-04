@@ -10,7 +10,7 @@ class TransactionController extends Controller
 {
      public function index()
     {
-        $transactions = Transaction::with('provider')
+        $transactions = Transaction::with('provider.user')
             ->where('student_id', Auth::id())
             ->latest()
             ->get();
