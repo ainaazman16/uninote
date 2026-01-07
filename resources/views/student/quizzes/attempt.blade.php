@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ route('student.notes.show', $note->id) }}"
+       class="btn btn-outline-secondary btn-sm me-3">
+        ← Back
+    </a>
+    </div>
     <div class="container py-4">
 
         <div class="card shadow-sm mb-4">

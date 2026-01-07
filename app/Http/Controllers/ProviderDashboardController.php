@@ -42,15 +42,20 @@ class ProviderDashboardController extends Controller
         /* =======================
            Earnings
         ======================= */
-        $totalEarnings = Transaction::where('provider_id', $providerId)->sum('amount');
+        // Only count subscription income; exclude withdrawal records
+        $totalEarnings = Transaction::where('provider_id', $providerId)
+            ->where('type', 'subscription')
+            ->sum('amount');
 
         $monthlyEarnings = Transaction::where('provider_id', $providerId)
+            ->where('type', 'subscription')
             ->whereMonth('created_at', now()->month)
             ->whereYear('created_at', now()->year)
             ->sum('amount');
 
         $recentTransactions = Transaction::with('student')
             ->where('provider_id', $providerId)
+            ->where('type', 'subscription')
             ->latest()
             ->take(5)
             ->get();

@@ -135,6 +135,25 @@
                                         <strong class="d-block small text-muted text-uppercase mb-1">Motivation</strong>
                                         <p class="mb-3">{{ $user->providerApplication->reason }}</p>
                                     </div>
+                                    <div class="col-md-6">
+                                        <strong class="d-block small text-muted text-uppercase mb-1">Academic
+                                            Strengths</strong>
+                                        <p class="mb-3">{{ $user->providerApplication->academic_strength ?? '—' }}</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <strong class="d-block small text-muted text-uppercase mb-1">Notes Plan</strong>
+                                        <p class="mb-3">
+                                            {{ [
+                                                'weekly_lecture_notes' => 'Weekly lecture notes',
+                                                'tutorial_solutions' => 'Tutorial solutions and explanations',
+                                                'exam_revision_summaries' => 'Exam revision summaries',
+                                                'past_questions_with_answers' => 'Past questions with answers',
+                                                'comprehensive_study_guide' => 'Comprehensive study guide',
+                                                'mixed_content_plan' => 'Mixed content plan',
+                                            ][$user->providerApplication->notes_plan] ??
+                                                ($user->providerApplication->notes_plan ?? '—') }}
+                                        </p>
+                                    </div>
                                     @if ($user->providerApplication->background_info)
                                         <div class="col-md-12 border-top pt-3">
                                             <strong class="d-block small text-muted text-uppercase mb-1">Additional

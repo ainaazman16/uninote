@@ -1,8 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ route('admin.dashboard') }}"
+       class="btn btn-outline-secondary btn-sm me-3">
+        ← Back to Dashboard
+    </a>
+    </div>
     <div class="container py-4">
-
         <h3 class="fw-bold mb-4">Ratings & Feedback Moderation</h3>
 
         @if (session('success'))

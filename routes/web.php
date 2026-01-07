@@ -85,6 +85,7 @@ Route::middleware('auth')->group(function () {
     )->name('student.providers.search');
 
     Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
+        ->middleware('user.active')
         ->name('dashboard');
         
 
@@ -145,16 +146,6 @@ Route::post(
     [RatingController::class, 'store']
 )->middleware('auth')->name('providers.rate');
 
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/provider/notes/create', [NoteController::class, 'create'])->name('notes.create');
-//     Route::post('/provider/notes', [NoteController::class, 'store'])->name('notes.store');
-
-// });
-
-// Route::middleware(['auth'])->group(function () {
-//     Route::get('/provider/dashboard', [ProviderDashboardController::class, 'index'])->name('provider.dashboard');
-// });
 
 Route::middleware(['auth', 'provider'])->group(function () {
 
@@ -244,6 +235,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Admin dashboard
      Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
         ->name('admin.dashboard');
+    
+    Route::get('/admin/users', 
+        [AdminUserController::class, 'index']
+    )->name('admin.users.index');
+
+    Route::post('/admin/users/{user}/toggle-status',
+        [AdminUserController::class, 'toggleStatus']
+    )->name('admin.users.toggleStatus');
+    Route::post('/admin/users/{user}/suspend',
+        [AdminUserController::class, 'suspend']
+    )->name('admin.users.suspend');
+
+    Route::post('/admin/users/{user}/unsuspend',
+        [AdminUserController::class, 'unsuspend']
+    )->name('admin.users.unsuspend');
 
     Route::get('/admin/provider-applications', 
         [App\Http\Controllers\AdminProviderApprovalController::class, 'index'])
@@ -296,15 +302,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
         ->name('admin.withdrawals.reject');
 });
 
-Route::get('/dashboard', [StudentDashboardController::class, 'dashboard'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+ 
+Route::middleware(['auth', 'admin', 'user.active'])
+    ->prefix('admin')
+    ->group(function () {
 
+        Route::get('/users', [AdminUserController::class, 'index'])
+            ->name('admin.users.index');
 
-// Route::middleware(['auth','provider'])->group(function () {
-//     Route::get('/provider/notes/create', [NoteController::class, 'create'])->name('notes.create');
-//     Route::post('/provider/notes',[NoteController::class,'store'])->name('notes.store');
-// });
+});
+
 
 require __DIR__.'/auth.php';
 

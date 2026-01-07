@@ -14,6 +14,7 @@ class Note extends Model
         'file_path',
         'is_premium',
         'status',
+        'rejection_reason',
     ];
 
     public function provider()

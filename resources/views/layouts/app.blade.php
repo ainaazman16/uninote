@@ -83,12 +83,29 @@
 
                             {{-- USER DROPDOWN (Consolidates Profile, Admin Links & Logout) --}}
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style="width: 35px; height: 35px;">
-                                        {{ substr(Auth::user()->name, 0, 1) }}
-                                    </div>
-                                    <span class="fw-semibold">{{ Auth::user()->name }}</span>
-                                </a>
+                                <a class="nav-link dropdown-toggle d-flex align-items-center gap-2 text-dark"
+   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+    {{-- Avatar --}}
+    <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center shadow-sm"
+         style="width: 35px; height: 35px;">
+        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+    </div>
+
+    {{-- Name + Role --}}
+    <div class="d-flex flex-column lh-1">
+        <span class="fw-semibold">{{ Auth::user()->name }}</span>
+
+        @if(Auth::user()->role === 'admin')
+            <span class="badge bg-danger mt-1">Admin</span>
+        @elseif(Auth::user()->role === 'provider')
+            <span class="badge bg-primary mt-1">Provider</span>
+        @else
+            <span class="badge bg-success mt-1">Student</span>
+        @endif
+    </div>
+
+</a>
 
                                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 mt-2" style="min-width: 220px;">
                                     

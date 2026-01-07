@@ -1,7 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-
+    <div class="d-flex align-items-center mb-4">
+    <a href="{{ route('provider.dashboard') }}"
+       class="btn btn-outline-secondary btn-sm me-3">
+        ← Back to Dashboard
+    </a>
+    </div>
     <div class="container mt-4">
 
         <h2 class="fw-bold mb-4">Upload New Note</h2>

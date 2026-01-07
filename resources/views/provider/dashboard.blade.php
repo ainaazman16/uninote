@@ -4,6 +4,26 @@
     <div class="container mt-4">
 
         <h2 class="fw-bold mb-4">Provider Dashboard</h2>
+        {{-- Role Indicator --}}
+<div class="alert alert-primary d-flex align-items-center justify-content-between rounded-3 mb-4">
+    <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-person-badge fs-4"></i>
+        <div>
+            <div class="fw-semibold">
+                Viewing as: <span class="badge bg-primary">Provider</span>
+            </div>
+            <small class="text-muted">
+                You still have full student access (browse, rate, subscribe).
+            </small>
+        </div>
+    </div>
+
+    <a href="{{ route('dashboard') }}" class="btn btn-outline-primary btn-sm">
+        <i class="bi bi-arrow-repeat me-1"></i>
+        Switch to Student View
+    </a>
+</div>
+
         {{-- Summary Cards --}}
         <div class="row g-3">
 

@@ -2,11 +2,19 @@
 
 @section('content')
 <div class="container py-4">
+    <div class="d-flex align-items-center mb-4">
+    <a href="{{ route('provider.notes.index') }}"
+       class="btn btn-outline-secondary btn-sm me-3">
+        ← Back to My Notes
+    </a>
+    <h4 class="fw-bold mb-0">Create Quiz</h4>
+</div>
 
-    <h4 class="fw-bold mb-3">
+<div>
+<h4 class="fw-bold mb-3">
         Create Quiz for: {{ $note->title }}
     </h4>
-
+</div> 
     <p class="text-muted mb-4">
         This quiz is optional. Students will see the result immediately after submission.
     </p>

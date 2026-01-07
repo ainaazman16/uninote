@@ -43,6 +43,8 @@ class ProviderApplicationController extends Controller
     {
         $request->validate([
             'reason' => 'required|string|max:500',
+            'academic_strength' => 'required|string',
+            'notes_plan' => 'required|string|in:weekly_lecture_notes,tutorial_solutions,exam_revision_summaries,past_questions_with_answers,comprehensive_study_guide,mixed_content_plan',
         ]);
 
         ProviderApplication::create([

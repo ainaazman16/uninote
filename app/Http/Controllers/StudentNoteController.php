@@ -97,6 +97,9 @@ public function show(Note $note)
         }
     }
 
+        // Increment download count
+        $note->increment('download_count');
+
         return response()->download(
         storage_path('app/public/' . $note->file_path)
     );

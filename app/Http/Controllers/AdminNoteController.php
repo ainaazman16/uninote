@@ -8,7 +8,9 @@ class AdminNoteController extends Controller
 {
     public function index()
     {
-        $notes = Note::orderBy('created_at', 'desc')->get();
+        $notes = Note::with(['provider.user', 'quiz.questions'])
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('admin.notes.index', compact('notes'));
     }
 
@@ -20,7 +22,15 @@ class AdminNoteController extends Controller
 
     public function reject(Note $note)
     {
-        $note->update(['status' => 'rejected']);
+        $validated = request()->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+
+        $note->update([
+            'status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
+        ]);
+
         return redirect()->back()->with('success', 'Note rejected!');
     }
 }

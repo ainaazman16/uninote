@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ route('student.notes.index') }}"
+       class="btn btn-outline-secondary btn-sm me-3">
+        ← Back to Browse Notes
+    </a>
+    </div>
     <div class="container py-4">
 
         <div class="mb-4">

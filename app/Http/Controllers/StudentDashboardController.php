@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Provider;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Subscription;
+use App\Models\Note;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -26,6 +27,13 @@ class StudentDashboardController extends Controller
 
     // Total subscribed providers
     $totalSubscriptions = $student->subscriptions()->count();
+
+    // Total notes downloaded (sum of download_count for all notes from subscribed providers)
+    $totalDownloads = Note::whereIn('provider_id', function ($q) use ($student) {
+        $q->select('provider_id')
+            ->from('subscriptions')
+            ->where('student_id', $student->id);
+    })->sum('download_count');
 
     // Fetch subscribed providers (with their user data)
    $subscribedProviders = $student->subscriptions()
@@ -49,6 +57,7 @@ class StudentDashboardController extends Controller
 
     return view('dashboard', compact(
         'totalSubscriptions',
+        'totalDownloads',
         'subscribedProviders',
         'providers',
         'subscriptions'

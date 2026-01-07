@@ -99,7 +99,7 @@
                                                 class="form-control @error('programme') is-invalid @enderror" id="prog"
                                                 value="{{ old('programme', auth()->user()->programme) }}"
                                                 placeholder="Programme">
-                                            <label for="prog">Degree Programme</label>
+                                            <label for="prog">Programme</label>
                                             @error('programme')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
@@ -112,7 +112,7 @@
                                                 class="form-select @error('year_of_study') is-invalid @enderror"
                                                 id="year">
                                                 <option value="" disabled>Select Year</option>
-                                                @foreach (['1st Year', '2nd Year', '3rd Year', '4th Year', 'Postgrad'] as $year)
+                                                @foreach (['1st Year', '2nd Year', '3rd Year', '4th Year', 'Postgrad', 'Graduated'] as $year)
                                                     <option value="{{ $year }}"
                                                         {{ auth()->user()->year_of_study == $year ? 'selected' : '' }}>
                                                         {{ $year }}</option>

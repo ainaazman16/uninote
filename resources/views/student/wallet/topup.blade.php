@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="d-flex align-items-center mb-4">
+    <a href="{{ route('student.wallet.index') }}"
+       class="btn btn-outline-secondary btn-sm me-3">
+        ← Back to Wallet
+    </a>
+    </div>
     <div class="container py-4">
 
         <h3 class="fw-bold mb-4">Top Up Wallet</h3>
