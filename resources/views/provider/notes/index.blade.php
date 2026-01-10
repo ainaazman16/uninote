@@ -29,6 +29,7 @@
                         <th>Quiz</th>
                         <th>Uploaded At</th>
                         <th>Actions</th>
+                        <th>Analytics</th>
                     </tr>
                 </thead>
 
@@ -85,6 +86,12 @@
                                     </button>
                                 </form>
 
+                            </td>
+                            <td>
+                                <a href="{{ route('provider.analytics.ratings', ['note_id' => $note->id]) }}"
+                                    class="btn btn-sm btn-outline-info">
+                                    View Analytics
+                                </a>
                             </td>
                         </tr>
                     @endforeach

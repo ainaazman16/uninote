@@ -150,6 +150,18 @@
                                                 <i class="bi bi-journal-text me-2 text-secondary"></i> My Notes
                                             </a>
                                         </li>
+                                        <li>
+                                        <a class="dropdown-item rounded-2 py-2"
+                                        href="{{ route('provider.notifications') }}">
+                                            <i class="bi bi-bell me-2"></i>
+                                            Notifications
+                                            @if(auth()->user()->unreadNotifications->count())
+                                                <span class="badge bg-danger ms-2">
+                                                    {{ auth()->user()->unreadNotifications->count() }}
+                                                </span>
+                                            @endif
+                                        </a>
+                                    </li>
 
                                     @endif
 

@@ -13,7 +13,8 @@ class WalletTopup extends Model
         'proof_path',
         'status',
         'approved_by',
-        'approved_at'
+        'approved_at',
+        'rejection_reason'
     ];
 
     public function user()

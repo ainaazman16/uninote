@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex align-items-center mb-4">
-    <a href="{{ route('dashboard') }}"
-       class="btn btn-outline-secondary btn-sm me-3">
-        ← Back to Dashboard
-    </a>
+    <div class="d-flex align-items-center mb-4">
+        <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm me-3">
+            ← Back to Dashboard
+        </a>
     </div>
     <div class="container py-4">
 
@@ -64,6 +63,40 @@
                                             Pending Approval
                                         </span>
                                     </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+
+        {{-- Rejected Top-Ups --}}
+        @if (isset($rejectedTopups) && $rejectedTopups->count())
+            <h5 class="fw-bold mb-3">Rejected Top-Ups</h5>
+
+            <div class="card shadow-sm border-0 rounded-4 mb-4">
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($rejectedTopups as $topup)
+                                <tr>
+                                    <td>{{ $topup->created_at->format('d M Y, h:i A') }}</td>
+                                    <td class="fw-bold">RM {{ number_format($topup->amount, 2) }}</td>
+                                    <td>{{ ucfirst($topup->payment_method) }}</td>
+                                    <td>
+                                        <span class="badge bg-danger">Rejected</span>
+                                    </td>
+                                    <td class="text-muted">{{ $topup->rejection_reason }}</td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -27,9 +27,13 @@
                     <tr>
                         <th>Provider</th>
                         <th>Amount</th>
+                        <th>Bank</th>
+                        <th>Account Number</th>
+                        <th>Account Name</th>                     
                         <th>Status</th>
                         <th>Requested At</th>
                         <th>Action</th>
+                        <th>Proof</th>
                     </tr>
                 </thead>
 
@@ -38,6 +42,9 @@
                     <tr>
                         <td>{{ $withdrawal->provider->name }}</td>
                         <td>RM {{ number_format($withdrawal->amount, 2) }}</td>
+                        <td>{{ $withdrawal->bank_name }}</td>
+                        <td>{{ $withdrawal->account_number }}</td>
+                        <td>{{ $withdrawal->account_name }}</td>
                         <td>
                             <span class="badge bg-{{ 
                                 $withdrawal->status === 'approved' ? 'success' :
@@ -48,32 +55,53 @@
                         </td>
                         <td>{{ $withdrawal->created_at->format('d M Y') }}</td>
                         <td>
-                            @if($withdrawal->status === 'pending')
-                                <form method="POST"
-                                      action="{{ route('admin.withdrawals.approve', $withdrawal) }}"
-                                      class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-sm btn-success">
-                                        Approve
-                                    </button>
-                                </form>
+                           @if($withdrawal->status === 'pending')
+                            <form method="POST"
+                                action="{{ route('admin.withdrawals.approve', $withdrawal) }}"
+                                enctype="multipart/form-data"
+                                class="d-inline">
+                                @csrf
 
-                                <form method="POST"
-                                      action="{{ route('admin.withdrawals.reject', $withdrawal) }}"
-                                      class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-sm btn-danger">
-                                        Reject
-                                    </button>
-                                </form>
-                            @else
-                                —
-                            @endif
+                                <input type="file"
+                                    name="payment_proof"
+                                    class="form-control form-control-sm mb-1"
+                                    accept="image/*,application/pdf"
+                                    required>
+
+                                <button class="btn btn-sm btn-success w-100">
+                                    Approve & Upload Proof
+                                </button>
+                            </form>
+
+                            <form method="POST"
+                                action="{{ route('admin.withdrawals.reject', $withdrawal) }}"
+                                class="d-inline mt-1">
+                                @csrf
+                                <button class="btn btn-sm btn-danger w-100">
+                                    Reject
+                                </button>
+                            </form>
+                        @else
+                            —
+                        @endif
+
                         </td>
+                        <td>
+    @if($withdrawal->payment_proof)
+        <a href="{{ asset('storage/'.$withdrawal->payment_proof) }}"
+           target="_blank"
+           class="btn btn-sm btn-outline-primary">
+            View Proof
+        </a>
+    @else
+        —
+    @endif
+</td>
+
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">
+                        <td colspan="9" class="text-center text-muted">
                             No withdrawal requests.
                         </td>
                     </tr>

@@ -15,6 +15,11 @@ class Note extends Model
         'is_premium',
         'status',
         'rejection_reason',
+        'download_count',
+    ];
+
+    protected $casts = [
+        'download_count' => 'integer',
     ];
 
     public function provider()

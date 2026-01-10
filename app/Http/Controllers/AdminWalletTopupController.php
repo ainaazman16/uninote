@@ -55,14 +55,19 @@ class AdminWalletTopupController extends Controller
     }
 
 
-    public function reject(WalletTopup $topup)
+    public function reject(Request $request, WalletTopup $topup)
     {
         if ($topup->status !== 'pending') {
             return back()->with('error', 'Top-up already processed.');
         }
 
+        $validated = $request->validate([
+            'rejection_reason' => 'required|string|max:500',
+        ]);
+
         $topup->update([
             'status' => 'rejected',
+            'rejection_reason' => $validated['rejection_reason'],
         ]);
 
         return back()->with('success', 'Top-up rejected.');

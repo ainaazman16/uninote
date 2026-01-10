@@ -41,6 +41,11 @@
                     View All Notes
                 </a>
 
+                <a href="{{ route('provider.analytics') }}" class="btn btn-outline-primary">
+                    View Analytics
+                </a>
+
+
             </div>
         </div>
             {{-- Wallet Balance --}}
@@ -65,21 +70,64 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <form method="POST" action="{{ route('provider.withdraw') }}">
+                   <form method="POST" action="{{ route('provider.withdraw') }}">
                         @csrf
 
-                        <div class="input-group">
-                            <input type="number"
-                                name="amount"
-                                class="form-control"
-                                placeholder="Enter amount"
-                                min="1"
-                                step="0.01"
-                                required>
+                        <div class="row g-3">
 
-                            <button class="btn btn-dark">Request</button>
+                            {{-- Amount --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Withdrawal Amount</label>
+                                <input type="number"
+                                    name="amount"
+                                    class="form-control"
+                                    min="1"
+                                    step="0.01"
+                                    required>
+                            </div>
+
+                            {{-- Bank Name --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Bank Name</label>
+                                <input type="text"
+                                    name="bank_name"
+                                    class="form-control"
+                                    placeholder="e.g. Maybank"
+                                    required>
+                            </div>
+
+                            {{-- Account Number --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Account Number</label>
+                                <input type="text"
+                                    name="account_number"
+                                    class="form-control"
+                                    required>
+                            </div>
+
+                            {{-- Account Name --}}
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Account Holder Name</label>
+                                <input type="text"
+                                    name="account_name"
+                                    class="form-control"
+                                    required>
+                            </div>
+
+                            {{-- Submit --}}
+                            <div class="col-12">
+                                <button class="btn btn-dark w-100 mt-2">
+                                    Request Withdrawal
+                                </button>
+                            </div>
+
                         </div>
                     </form>
+
+                    <small class="text-muted d-block mt-2">
+                        Withdrawals require admin approval and manual bank transfer.
+                    </small>
+
 
                     <small class="text-muted">
                         Withdrawals require admin approval.

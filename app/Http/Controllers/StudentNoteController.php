@@ -97,8 +97,8 @@ public function show(Note $note)
         }
     }
 
-        // Increment download count
-        $note->increment('download_count');
+        // Increment download count using a direct query to avoid model cache edge cases
+        Note::whereKey($note->id)->increment('download_count');
 
         return response()->download(
         storage_path('app/public/' . $note->file_path)

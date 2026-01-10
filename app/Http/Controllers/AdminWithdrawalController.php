@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Withdrawal;
 use App\Models\Transaction;
+use App\Notifications\WithdrawalApprovedNotification;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -17,48 +18,45 @@ class AdminWithdrawalController extends Controller
 
         return view('admin.withdrawals.index', compact('withdrawals'));
     }
-    public function approve(Withdrawal $withdrawal)
-    {
-        if ($withdrawal->status !== 'pending') {
-            return back()->with('error', 'Invalid withdrawal status.');
-        }
-
-        DB::transaction(function () use ($withdrawal) {
-
-            // Update withdrawal
-            $withdrawal->update(['status' => 'approved']);
-
-            // Get the user (provider user)
-            $user = $withdrawal->provider;
-            if (!$user) {
-                throw new \Exception('User not found for this withdrawal.');
-            }
-            
-            // Get the provider record
-            $provider = $user->provider;
-            if (!$provider) {
-                throw new \Exception('Provider record not found for this user.');
-            }
-            
-            // Deduct wallet
-            $wallet = $user->wallet;
-            if (!$wallet) {
-                throw new \Exception('Wallet not found for this user.');
-            }
-            
-            $wallet->decrement('balance', $withdrawal->amount);
-
-            // Record transaction
-            Transaction::create([
-                'student_id'  => null,
-                'provider_id' => $provider->id,
-                'amount'      => $withdrawal->amount,
-                'type'        => 'withdrawal'
-            ]);
-        });
-
-        return back()->with('success', 'Withdrawal approved.');
+    public function approve(Request $request, Withdrawal $withdrawal)
+{
+    if ($withdrawal->status !== 'pending') {
+        return back()->with('error', 'Invalid withdrawal status.');
     }
+
+    $request->validate([
+        'payment_proof' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
+    ]);
+
+    // Store proof
+    $path = $request->file('payment_proof')
+                    ->store('withdrawal_proofs', 'public');
+
+    // Deduct provider wallet
+    $wallet = $withdrawal->provider->wallet;
+
+    if ($wallet->balance < $withdrawal->amount) {
+        return back()->with('error', 'Insufficient provider wallet balance.');
+    }
+
+    $wallet->decrement('balance', $withdrawal->amount);
+
+    // Update withdrawal
+    $withdrawal->update([
+        'status' => 'approved',
+        'payment_proof' => $path,
+        'approved_at' => now(),
+    ]);
+
+    // Refresh withdrawal to get updated payment_proof
+    $withdrawal->refresh();
+    
+    $withdrawal->provider->notify(
+        new WithdrawalApprovedNotification($withdrawal)
+    );
+    return back()->with('success', 'Withdrawal approved and proof uploaded.');
+}
+
     public function reject(Withdrawal $withdrawal)
     {
         if ($withdrawal->status !== 'pending') {

@@ -30,10 +30,16 @@ public function index()
             ->latest()
             ->get();
 
+        $rejectedTopups = WalletTopup::where('user_id', $user->id)
+            ->where('status', 'rejected')
+            ->latest()
+            ->get();
+
         return view('student.wallet.index', compact(
             'wallet',
             'transactions',
-            'pendingTopups'
+            'pendingTopups',
+            'rejectedTopups'
         ));
     }
 

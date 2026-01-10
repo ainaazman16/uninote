@@ -11,6 +11,8 @@ use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\StudentWalletController;
 use App\Http\Controllers\AdminWalletTopupController;
 use App\Http\Controllers\NoteRatingController;
+use App\Http\Controllers\ProviderRatingAnalyticsController;
+use App\Http\Controllers\ProviderAnalyticsController;
 use App\Http\Controllers\StudentQuizController;
 use App\Http\Controllers\ProviderQuizController;
 use App\Http\Controllers\ProviderDashboardController;
@@ -195,7 +197,21 @@ Route::middleware(['auth', 'provider'])->group(function () {
         [ProviderQuizController::class, 'update']
     )->name('provider.quiz.update');
 
+     Route::get('/provider/analytics', 
+        [ProviderAnalyticsController::class, 'index']
+    )->name('provider.analytics');
+
 });
+Route::get('/provider/notifications', function () {
+    return view('provider.notifications', [
+        'notifications' => auth()->user()->notifications
+    ]);
+})->middleware(['auth', 'provider'])->name('provider.notifications');
+Route::get('/provider/analytics/ratings', 
+    [ProviderRatingAnalyticsController::class, 'index']
+)->middleware(['auth', 'provider'])
+ ->name('provider.analytics.ratings');
+
 
 Route::middleware('auth')->group(function () {
 
