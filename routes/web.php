@@ -174,6 +174,9 @@ Route::middleware(['auth', 'provider'])->group(function () {
         [NoteController::class, 'destroy']
     )->name('provider.notes.destroy');
     
+    Route::get('/provider/withdrawals', [ProviderWithdrawalController::class, 'index'])
+    ->name('provider.withdrawals.index');
+
     Route::post('/provider/withdraw', [ProviderWithdrawalController::class, 'store'])
     ->name('provider.withdraw');
 
@@ -200,6 +203,12 @@ Route::middleware(['auth', 'provider'])->group(function () {
      Route::get('/provider/analytics', 
         [ProviderAnalyticsController::class, 'index']
     )->name('provider.analytics');
+
+    Route::get('/support/chat', [App\Http\Controllers\ProviderChatController::class, 'index'])
+            ->name('provider.chat');
+
+        Route::post('/support/chat/send', [App\Http\Controllers\ProviderChatController::class, 'send'])
+            ->name('provider.chat.send');
 
 });
 Route::get('/provider/notifications', function () {
@@ -316,6 +325,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('/admin/withdrawals/{withdrawal}/reject', [AdminWithdrawalController::class, 'reject'])
         ->name('admin.withdrawals.reject');
+
+    // Admin Chat Management
+    Route::get('/admin/chats', [App\Http\Controllers\AdminChatController::class, 'index'])
+        ->name('admin.chats');
+
+    Route::get('/admin/chats/{chat}', [App\Http\Controllers\AdminChatController::class, 'show'])
+        ->name('admin.chats.show');
+
+    Route::post('/admin/chats/{chat}/send', [App\Http\Controllers\AdminChatController::class, 'send'])
+        ->name('admin.chats.send');
 });
 
  

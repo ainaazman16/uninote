@@ -151,6 +151,25 @@
                 </div>
             </div>
 
+            <!-- Provider Support Chats -->
+            <div class="col-md-4">
+                <div class="card admin-card text-center">
+                    <div class="admin-icon">💬</div>
+                    <h5 class="fw-bold">
+                        Provider Support Chats
+                        @if ($pendingChats > 0)
+                            <span class="badge bg-danger ms-2">
+                                {{ $pendingChats }}
+                            </span>
+                        @endif
+                    </h5>
+                    <p class="text-muted">Respond to provider support inquiries.</p>
+                    <a href="{{ route('admin.chats') }}" class="btn btn-primary w-100">
+                        View Chats
+                    </a>
+                </div>
+            </div>
+
         </div>
 
         <!-- Analytics Cards & Charts Section -->

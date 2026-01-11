@@ -9,9 +9,21 @@ use Illuminate\Http\Request;
 
 class AdminProviderApprovalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $applications = ProviderApplication::with('user')
+        ->when($request->search, function ($query) use ($request) {
+            $query->where(function ($q) use ($request) {
+                $q->where('reason', 'LIKE', '%' . $request->search . '%')
+                  ->orWhereHas('user', function ($userQuery) use ($request) {
+                      $userQuery->where('name', 'LIKE', '%' . $request->search . '%')
+                                ->orWhere('email', 'LIKE', '%' . $request->search . '%');
+                  });
+            });
+        })
+        ->when($request->status, function ($query) use ($request) {
+            $query->where('status', $request->status);
+        })
         ->latest()
         ->get();
 

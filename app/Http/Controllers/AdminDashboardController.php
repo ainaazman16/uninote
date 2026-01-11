@@ -6,6 +6,8 @@ use App\Models\Subscription;
 use App\Models\User;
 use Carbon\Carbon;
 use App\Models\WalletTopup;
+use App\Models\Chat;
+use App\Models\ChatMessage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -68,9 +70,25 @@ class AdminDashboardController extends Controller
 
     $pendingTopups = WalletTopup::where('status', 'pending')->count();
 
+    // Count chats with unread messages (messages from providers that admin hasn't responded to)
+    $pendingChats = Chat::whereHas('messages', function ($query) {
+        $query->where('sender_id', '!=', auth()->id())
+              ->where('created_at', '>', function ($subQuery) {
+                  $subQuery->select('created_at')
+                           ->from('chat_messages')
+                           ->whereColumn('chat_id', 'chats.id')
+                           ->where('sender_id', auth()->id())
+                           ->orderByDesc('created_at')
+                           ->limit(1);
+              });
+    })->orWhereDoesntHave('messages', function ($query) {
+        $query->where('sender_id', auth()->id());
+    })->whereHas('messages')->count();
+
     return view('admin.dashboard', compact(
         'pendingWithdrawals',
         'pendingTopups',
+        'pendingChats',
         'subscriptionCount',
         'userLabels',
         'userData',

@@ -9,6 +9,15 @@ use Illuminate\Http\Request;
 
 class ProviderWithdrawalController extends Controller
 {
+    public function index()
+    {
+        $withdrawals = Withdrawal::where('provider_id', auth()->id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('provider.withdrawals.index', compact('withdrawals'));
+    }
+
     public function store(Request $request)
 {
     $request->validate([

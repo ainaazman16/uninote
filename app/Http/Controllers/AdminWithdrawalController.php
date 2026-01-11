@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Withdrawal;
 use App\Models\Transaction;
 use App\Notifications\WithdrawalApprovedNotification;
+use App\Notifications\WithdrawalRejectedNotification;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -57,13 +58,24 @@ class AdminWithdrawalController extends Controller
     return back()->with('success', 'Withdrawal approved and proof uploaded.');
 }
 
-    public function reject(Withdrawal $withdrawal)
+    public function reject(Request $request, Withdrawal $withdrawal)
     {
         if ($withdrawal->status !== 'pending') {
             return back()->with('error', 'Invalid withdrawal status.');
         }
 
-        $withdrawal->update(['status' => 'rejected']);
+        $request->validate([
+            'rejection_reason' => 'required|string|min:10|max:500',
+        ]);
+
+        $withdrawal->update([
+            'status' => 'rejected',
+            'rejection_reason' => $request->rejection_reason,
+        ]);
+
+        $withdrawal->provider->notify(
+            new WithdrawalRejectedNotification($withdrawal)
+        );
 
         return back()->with('success', 'Withdrawal rejected.');
     }

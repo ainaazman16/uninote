@@ -21,6 +21,18 @@ class StudentNoteController extends Controller
             ->when($request->subject_id, function ($query) use ($request) {
                 $query->where('subject_id', $request->subject_id);
             })
+            ->when($request->search, function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('title', 'LIKE', '%' . $request->search . '%')
+                      ->orWhere('description', 'LIKE', '%' . $request->search . '%')
+                      ->orWhereHas('subject', function ($subjectQuery) use ($request) {
+                          $subjectQuery->where('name', 'LIKE', '%' . $request->search . '%');
+                      })
+                      ->orWhereHas('provider.user', function ($providerQuery) use ($request) {
+                          $providerQuery->where('name', 'LIKE', '%' . $request->search . '%');
+                      });
+                });
+            })
             ->latest()
             ->get();
 
