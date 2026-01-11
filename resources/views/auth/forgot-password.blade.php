@@ -19,6 +19,18 @@
                         </div>
                     @endif
 
+                    @if (session('reset_link'))
+                        <div class="alert alert-warning">
+                            <strong>Development Mode:</strong> Click the link below to reset your password:
+                            <hr>
+                            <a href="{{ session('reset_link') }}" class="btn btn-sm btn-primary w-100 mt-2">
+                                Reset Password Now
+                            </a>
+                            <small class="d-block mt-2 text-muted">Or copy: <code
+                                    class="text-dark">{{ session('reset_link') }}</code></small>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('password.email', absolute: false) }}">
                         @csrf
 

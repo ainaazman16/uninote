@@ -1,11 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex align-items-center mb-4">
-    <a href="{{ route('student.wallet.index') }}"
-       class="btn btn-outline-secondary btn-sm me-3">
-        ← Back to Wallet
-    </a>
+    <div class="d-flex align-items-center mb-4">
+        <a href="{{ route('student.wallet.index') }}" class="btn btn-outline-secondary btn-sm me-3">
+            ← Back to Wallet
+        </a>
     </div>
     <div class="container py-4">
 
@@ -36,9 +35,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Payment Method</label>
                         <select name="payment_method" class="form-select" required>
-                            <option value="">-- Select Method --</option>
-                            <option value="transfer">Bank Transfer</option>
-                            <option value="qr">QR Code</option>
+                            <option value="transfer" selected>Bank Transfer</option>
                         </select>
                     </div>
 
@@ -46,9 +43,9 @@
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Payment Details</label>
                         <div class="border rounded p-3 bg-light small">
-                            <strong>Bank:</strong> TEST BANK<br>
+                            <strong>Bank:</strong> MAYBANK<br>
                             <strong>Account Name:</strong> UniNote Admin<br>
-                            <strong>Account Number:</strong> 1234 5678 9012<br>
+                            <strong>Account Number:</strong> 1550 8733 4366<br>
                             <strong>Reference:</strong> Your Name / Email
                         </div>
                     </div>

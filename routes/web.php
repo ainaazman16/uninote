@@ -30,21 +30,7 @@ use App\Http\Controllers\ProviderController;
 // });
 
 
-Route::get('/', function () {
-    if (auth()->check()) {
-        if (auth()->user()->role === 'admin') {
-            return redirect('/admin/dashboard');
-        }
-
-        if (auth()->user()->role === 'provider') {
-            return redirect('/provider/dashboard');
-        }
-
-        return redirect('/dashboard');
-    }
-
-    return redirect('/login');
-});
+Route::view('/', 'welcome');
 
 // View public profile (student or provider)
 Route::get('/users/{user}', [ProfileController::class, 'show'])

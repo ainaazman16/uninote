@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class PasswordResetLinkController extends Controller
@@ -35,6 +36,19 @@ class PasswordResetLinkController extends Controller
         $status = Password::sendResetLink(
             $request->only('email')
         );
+
+        // For local development: show reset link on screen
+        if ($status == Password::RESET_LINK_SENT && config('app.env') === 'local') {
+            $token = DB::table('password_reset_tokens')
+                ->where('email', $request->email)
+                ->value('token');
+            
+            if ($token) {
+                $resetUrl = url(route('password.reset', ['token' => $token], false) . '?email=' . urlencode($request->email));
+                return back()->with('status', __($status))
+                    ->with('reset_link', $resetUrl);
+            }
+        }
 
         return $status == Password::RESET_LINK_SENT
                     ? back()->with('status', __($status))
