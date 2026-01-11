@@ -210,6 +210,9 @@ Route::middleware(['auth', 'provider'])->group(function () {
         Route::post('/support/chat/send', [App\Http\Controllers\ProviderChatController::class, 'send'])
             ->name('provider.chat.send');
 
+        Route::get('/support/chat/{chat}/messages', [App\Http\Controllers\ProviderChatController::class, 'getMessages'])
+            ->name('provider.chat.messages');
+
 });
 Route::get('/provider/notifications', function () {
     return view('provider.notifications', [
@@ -335,6 +338,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::post('/admin/chats/{chat}/send', [App\Http\Controllers\AdminChatController::class, 'send'])
         ->name('admin.chats.send');
+
+    Route::get('/admin/chats/{chat}/messages', [App\Http\Controllers\AdminChatController::class, 'getMessages'])
+        ->name('admin.chats.messages');
 });
 
  

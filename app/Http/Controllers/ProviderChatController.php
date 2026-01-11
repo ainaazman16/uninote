@@ -34,4 +34,10 @@ class ProviderChatController extends Controller
 
         return back();
     }
+
+    public function getMessages(Chat $chat)
+    {
+        $messages = $chat->messages()->with('sender')->latest('id')->get()->reverse()->values();
+        return response()->json($messages);
+    }
 }
