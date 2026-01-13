@@ -6,7 +6,7 @@
         {{-- Top Navigation / Breadcrumb --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h4 class="fw-bold text-secondary mb-0">Profile Overview</h4>
-            <a href="{{ url()->previous() }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill">
+            <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary btn-sm px-3 rounded-pill">
                 <i class="bi bi-arrow-left me-1"></i> Back
             </a>
         </div>

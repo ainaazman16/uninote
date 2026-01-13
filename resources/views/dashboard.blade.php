@@ -111,6 +111,14 @@
                     </a>
                 </li>
 
+                <li class="mb-3">
+                    <a href="{{ route('student.chats.index') }}"
+                        class="text-decoration-none text-dark d-flex align-items-center">
+                        <span class="me-2">💬</span>
+                        <span class="menu-text">My Chats</span>
+                    </a>
+                </li>
+
 
 
             </ul>
@@ -147,12 +155,12 @@
 
             <div class="row g-4">
 
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div class="dashboard-card">
                         <h5>Total Notes Accessed</h5>
                         <h2 class="fw-bold">12</h2>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-md-4">
                     <div class="dashboard-card">
@@ -190,12 +198,12 @@
 
                     </div>
                 </div>
-                <div class="col-md-4">
+                {{-- <div class="col-md-4">
                     <div class="dashboard-card">
                         <h5>Total Notes Downloaded</h5>
                         <h2 class="fw-bold">{{ $totalDownloads }}</h2>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <hr class="my-4">
             <h4 class="fw-bold mb-3">Find Providers</h4>

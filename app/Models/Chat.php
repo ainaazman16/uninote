@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Chat extends Model
 {
-     protected $fillable = ['provider_id', 'admin_id'];
+    protected $fillable = ['provider_id', 'admin_id', 'student_id', 'type'];
 
     public function messages()
     {
@@ -21,5 +21,10 @@ class Chat extends Model
     public function admin()
     {
         return $this->belongsTo(User::class, 'admin_id');
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(User::class, 'student_id');
     }
 }

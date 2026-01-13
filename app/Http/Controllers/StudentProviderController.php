@@ -43,30 +43,13 @@ class StudentProviderController extends Controller
 
         $isSubscribed = $subscription && $subscription->isActive();
 
-        /*
-        |--------------------------------------------------------------------------
-        | Provider average rating (from NOTE ratings)
-        |--------------------------------------------------------------------------
-        */
-        $noteIds = $notes->pluck('id');
-
-        $averageRating = $noteIds->isEmpty()
-            ? null
-            : NoteRating::whereIn('note_id', $noteIds)->avg('rating');
-
-        $ratingCount = $noteIds->isEmpty()
-            ? 0
-            : NoteRating::whereIn('note_id', $noteIds)->count();
-
         return view('student.providers.show', compact(
             'user',
             'provider',
             'notes',
             'isSubscribed',
             'subscription',
-            'daysRemaining',
-            'averageRating',
-            'ratingCount'
+            'daysRemaining'
         ));
     }
 }

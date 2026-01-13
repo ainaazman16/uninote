@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
@@ -45,6 +47,24 @@ class ProfileController extends Controller
             ->route('profile.edit')
             ->with('success', 'Profile updated successfully.');
 
+    }
+
+    // UPDATE PASSWORD
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $user = Auth::user();
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()
+            ->route('profile.edit')
+            ->with('password_success', 'Password updated successfully.');
     }
 
     // DELETE OWN PROFILE

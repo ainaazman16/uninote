@@ -10,7 +10,10 @@ class AdminChatController extends Controller
 {
     public function index()
     {
-        $chats = Chat::with('provider')->latest()->get();
+        $chats = Chat::where('type', 'provider_admin')
+            ->with('provider')
+            ->latest()
+            ->get();
         return view('admin.chats.index', compact('chats'));
     }
 

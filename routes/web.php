@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminWithdrawalController;
 use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\AdminRatingController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminSubjectController;
 use App\Http\Controllers\StudentWalletController;
 use App\Http\Controllers\AdminWalletTopupController;
 use App\Http\Controllers\NoteRatingController;
@@ -19,7 +20,7 @@ use App\Http\Controllers\ProviderDashboardController;
 use App\Http\Controllers\StudentDashboardController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProviderWithdrawalController;
-use App\Http\Controllers\RatingController;
+use App\Http\Controllers\StudentChatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubscriptionController;
@@ -39,6 +40,7 @@ Route::get('/users/{user}', [ProfileController::class, 'show'])
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
      Route::get('/notes', [\App\Http\Controllers\StudentNoteController::class, 'index'])
@@ -62,6 +64,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/providers/{provider}', [ProviderController::class, 'show'])
     ->name('providers.show');
 
+    // Student -> Provider chat
+    Route::get('/student/chats', [StudentChatController::class, 'index'])
+        ->name('student.chats.index');
+    Route::get('/student/providers/{provider}/chat', [StudentChatController::class, 'show'])
+        ->name('student.provider.chat');
+    Route::post('/student/chats/{chat}/send', [StudentChatController::class, 'send'])
+        ->name('student.provider.chat.send');
+    Route::get('/student/chats/{chat}/messages', [StudentChatController::class, 'getMessages'])
+        ->name('student.provider.chat.messages');
+
     Route::get(
     '/student/subscriptions',
     [SubscriptionController::class, 'mySubscriptions']
@@ -81,14 +93,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/notes/{note}/rate', [NoteRatingController::class, 'store'])
     ->middleware('auth')
     ->name('notes.rate');
-    
-    Route::put('/ratings/{rating}', 
-        [RatingController::class, 'update']
-    )->name('ratings.update');
 
-    Route::delete('/ratings/{rating}', 
-        [RatingController::class, 'destroy']
-    )->name('ratings.destroy');
+    Route::put('/ratings/{rating}', [NoteRatingController::class, 'update'])
+    ->middleware('auth')
+    ->name('ratings.update');
+
+    Route::delete('/ratings/{rating}', [NoteRatingController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('ratings.destroy');
 
 
 });
@@ -128,11 +140,6 @@ Route::prefix('student')->middleware('auth')->group(function () {
 
     
 });
-
-Route::post(
-    '/providers/{provider}/rate',
-    [RatingController::class, 'store']
-)->middleware('auth')->name('providers.rate');
 
 
 Route::middleware(['auth', 'provider'])->group(function () {
@@ -199,6 +206,16 @@ Route::middleware(['auth', 'provider'])->group(function () {
         Route::get('/support/chat/{chat}/messages', [App\Http\Controllers\ProviderChatController::class, 'getMessages'])
             ->name('provider.chat.messages');
 
+    // Provider chat list and student conversations
+    Route::get('/provider/chats', [App\Http\Controllers\ProviderChatController::class, 'listChats'])
+        ->name('provider.chats.list');
+    Route::get('/provider/chats/{chat}', [App\Http\Controllers\ProviderChatController::class, 'showStudentChat'])
+        ->name('provider.chats.show');
+    Route::post('/provider/chats/{chat}/send', [App\Http\Controllers\ProviderChatController::class, 'sendToStudent'])
+        ->name('provider.chats.send');
+    Route::get('/provider/chats/{chat}/messages', [App\Http\Controllers\ProviderChatController::class, 'getStudentMessages'])
+        ->name('provider.chats.messages');
+
 });
 Route::get('/provider/notifications', function () {
     return view('provider.notifications', [
@@ -249,6 +266,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // Admin dashboard
      Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])
         ->name('admin.dashboard');
+
+    // Admin analytics
+    Route::get('/admin/analytics', [AdminDashboardController::class, 'analytics'])
+        ->name('admin.analytics.index');
     
     Route::get('/admin/users', 
         [AdminUserController::class, 'index']
@@ -304,6 +325,25 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::delete('/admin/ratings/{rating}', [AdminRatingController::class, 'destroy'])
         ->name('admin.ratings.destroy');
+
+    // Admin subjects management
+    Route::get('/admin/subjects', [AdminSubjectController::class, 'index'])
+        ->name('admin.subjects.index');
+
+    Route::get('/admin/subjects/create', [AdminSubjectController::class, 'create'])
+        ->name('admin.subjects.create');
+
+    Route::post('/admin/subjects', [AdminSubjectController::class, 'store'])
+        ->name('admin.subjects.store');
+
+    Route::get('/admin/subjects/{subject}/edit', [AdminSubjectController::class, 'edit'])
+        ->name('admin.subjects.edit');
+
+    Route::put('/admin/subjects/{subject}', [AdminSubjectController::class, 'update'])
+        ->name('admin.subjects.update');
+
+    Route::delete('/admin/subjects/{subject}', [AdminSubjectController::class, 'destroy'])
+        ->name('admin.subjects.destroy');
 
     //Admin withdrawal approval
       Route::get('/admin/withdrawals', [AdminWithdrawalController::class, 'index'])

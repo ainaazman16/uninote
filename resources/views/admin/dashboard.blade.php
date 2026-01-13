@@ -71,7 +71,9 @@
                     <div class="admin-icon">📘</div>
                     <h5 class="fw-bold">Subjects Management</h5>
                     <p class="text-muted">Manage subjects available in the system.</p>
-                    <a href="#" class="btn btn-secondary w-100 disabled">Coming Soon</a>
+                    <a href="{{ route('admin.subjects.index') }}" class="btn btn-primary w-100">
+                        Manage Subjects
+                    </a>
                 </div>
             </div>
 
@@ -141,15 +143,15 @@
                 </div>
             </div>
 
-            <!-- Analytics -->
+            {{-- <!-- Analytics -->
             <div class="col-md-4">
                 <div class="card admin-card text-center">
                     <div class="admin-icon">📊</div>
                     <h5 class="fw-bold">Analytics & Reports</h5>
                     <p class="text-muted">View system activity and provider statistics.</p>
-                    <a href="#" class="btn btn-secondary w-100 disabled">Coming Soon</a>
+                    <a href="{{ route('admin.analytics.index') }}" class="btn btn-primary w-100">Open Analytics</a>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Provider Support Chats -->
             <div class="col-md-4">

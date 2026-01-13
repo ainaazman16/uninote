@@ -53,6 +53,10 @@
                         <i class="bi bi-chat-dots"></i> Contact Admin Support
                     </a>
 
+                    <a href="{{ route('provider.chats.list') }}" class="btn btn-outline-primary">
+                        <i class="bi bi-chat-left-text"></i> View All Chats
+                    </a>
+
 
                 </div>
             </div>

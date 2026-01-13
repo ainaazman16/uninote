@@ -15,7 +15,7 @@
                 {{-- Page Title --}}
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-bold text-dark">Account Settings</h2>
-                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary btn-sm">
+                    <a href="{{ route('profile.show', auth()->user()) }}" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-arrow-left"></i> Back
                     </a>
                 </div>
@@ -153,8 +153,71 @@
                     </div>
 
                 </form> {{-- End Form --}}
+
+                {{-- PASSWORD CHANGE SECTION --}}
+                <div class="card shadow-lg border-0 overflow-hidden rounded-4 mt-4">
+                    <div class="card-body p-4 p-md-5">
+                        <h5 class="mb-4 text-uppercase fw-bold text-secondary small tracking-wide">
+                            <i class="bi bi-shield-lock me-2"></i>Change Password
+                        </h5>
+
+                        <form method="POST" action="{{ route('profile.password.update') }}">
+                            @csrf
+                            @method('PATCH')
+
+                            {{-- Current Password --}}
+                            <div class="form-floating mb-3">
+                                <input type="password" name="current_password"
+                                    class="form-control @error('current_password') is-invalid @enderror"
+                                    id="current_password" placeholder="Current Password" required>
+                                <label for="current_password">Current Password</label>
+                                @error('current_password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            {{-- New Password --}}
+                            <div class="form-floating mb-3">
+                                <input type="password" name="password"
+                                    class="form-control @error('password') is-invalid @enderror" id="password"
+                                    placeholder="New Password" required>
+                                <label for="password">New Password</label>
+                                @error('password')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="form-text">At least 8 characters</div>
+                            </div>
+
+                            {{-- Confirm New Password --}}
+                            <div class="form-floating mb-4">
+                                <input type="password" name="password_confirmation"
+                                    class="form-control @error('password_confirmation') is-invalid @enderror"
+                                    id="password_confirmation" placeholder="Confirm New Password" required>
+                                <label for="password_confirmation">Confirm New Password</label>
+                                @error('password_confirmation')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-3 align-items-center">
+                                @if (session('password_success'))
+                                    <span class="text-success fw-bold small fade-in">
+                                        <i class="bi bi-check-circle-fill me-1"></i> Password Updated!
+                                    </span>
+                                @endif
+                                <button type="submit" class="btn btn-success px-5 py-2 fw-bold shadow-sm">
+                                    Update Password
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
+    </div>
+    </div>
+    </div>
     </div>
 
     {{-- SIMPLE JAVASCRIPT FOR IMAGE PREVIEW --}}

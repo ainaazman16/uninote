@@ -21,26 +21,7 @@
                 <div class="flex-grow-1">
                     <h4 class="fw-bold mb-1">{{ $user->name }}</h4>
 
-                    @if ($ratingCount > 0)
-                        <div class="mb-1">
-                            @for ($i = 1; $i <= 5; $i++)
-                                @if ($i <= floor($averageRating))
-                                    <span class="text-warning">★</span>
-                                @elseif($i - $averageRating < 1)
-                                    <span class="text-warning">☆</span>
-                                @else
-                                    <span class="text-muted">★</span>
-                                @endif
-                            @endfor
-
-                            <span class="small text-muted ms-1">
-                                {{ number_format($averageRating, 1) }}/5
-                                ({{ $ratingCount }} reviews)
-                            </span>
-                        </div>
-                    @else
-                        <p class="small text-muted mb-1">No ratings yet</p>
-                    @endif
+                    
 
                     <p class="text-muted mb-1">
                         {{ $user->university }} · {{ $user->programme }}
@@ -49,7 +30,9 @@
                 </div>
 
                 <div class="text-end">
-                    @if ($isSubscribed)
+                    @if ($user->id === auth()->id())
+                        <span class="badge bg-secondary">Your Profile</span>
+                    @elseif ($isSubscribed)
                         <button class="btn btn-success mb-1" disabled>
                             ✔ Subscribed
                         </button>
@@ -75,38 +58,17 @@
                             </button>
                         </form>
                     @endif
+
+                    @if ($user->id !== auth()->id())
+                        <a href="{{ route('student.provider.chat', $user->id) }}"
+                            class="btn btn-outline-primary btn-sm mt-2">
+                            Message Provider
+                        </a>
+                    @endif
                 </div>
 
             </div>
         </div>
-        @if ($isSubscribed)
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h6 class="fw-bold mb-3">Rate this provider</h6>
-
-                    <form method="POST" action="{{ route('providers.rate', $provider->id) }}">
-                        @csrf
-
-                        {{-- Star rating --}}
-                        <div class="mb-3">
-                            @for ($i = 5; $i >= 1; $i--)
-                                <input type="radio" class="btn-check" name="rating" id="star{{ $i }}"
-                                    value="{{ $i }}" required>
-                                <label class="btn btn-outline-warning" for="star{{ $i }}">★</label>
-                            @endfor
-                        </div>
-
-                        {{-- Comment --}}
-                        <textarea name="comment" class="form-control mb-3" rows="3" placeholder="Optional feedback..."></textarea>
-
-                        <button class="btn btn-primary btn-sm">
-                            Submit Rating
-                        </button>
-                    </form>
-                </div>
-            </div>
-        @endif
-
 
         {{-- Notes --}}
         <h5 class="fw-bold mb-3">Notes by {{ $user->name }}</h5>
