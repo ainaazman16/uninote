@@ -14,6 +14,7 @@ class StudentWalletController extends Controller
 {
 public function index()
     {
+        abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot access wallet.');
         $user = Auth::user();
 
         $wallet = Wallet::firstOrCreate(

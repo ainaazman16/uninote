@@ -151,6 +151,26 @@
                 </div>
             @endif
 
+            @if (Auth::user()->role ==='admin')
+            {{-- Role Indicator --}}
+            <div class="alert alert-primary d-flex align-items-center justify-content-between rounded-3 mb-4">
+            <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-person-badge fs-4"></i>
+                <div>
+                    <div class="fw-semibold">
+                        Viewing as: <span class="badge bg-primary">Student</span>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-primary btn-sm">
+                <i class="bi bi-arrow-repeat me-1"></i>
+                Switch to Admin View
+            </a>
+            </div>
+                
+            @endif
+
             {{-- Summary Cards --}}
 
             <div class="row g-4">

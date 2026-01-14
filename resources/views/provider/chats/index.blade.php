@@ -2,8 +2,13 @@
 
 @section('content')
     <div class="container mt-4">
+        <div class="d-flex align-items-center mb-4">
+        <a href="{{ route('provider.dashboard') }}" class="btn btn-outline-secondary btn-sm me-3">
+            ← Back to Dashboard
+        </a>
+    </div>
         <h3 class="fw-bold mb-3">Admin Support Chat</h3>
-
+        
         <div class="card shadow-sm">
             <div class="card-body" id="messages-container" style="height: 400px; overflow-y:auto">
                 @foreach ($messages as $msg)

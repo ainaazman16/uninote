@@ -259,6 +259,8 @@ Route::post('/subscriptions/{provider}',
 
 //Admin Provider Approval Routes
 Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/universities', [App\Http\Controllers\AdminUserController::class, 'universities'])
+        ->name('admin.universities');
 
     Route::get('/notifications', [AdminNotificationController::class, 'index'])
         ->name('admin.notifications');

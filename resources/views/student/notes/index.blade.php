@@ -13,7 +13,7 @@
         {{-- Filter --}}
         <form method="GET" class="mb-4">
             <div class="row g-3">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="input-group">
                         <span class="input-group-text">
                             <i class="bi bi-search"></i>
@@ -23,7 +23,7 @@
                             value="{{ request('search') }}">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <select name="subject_id" class="form-select">
                         <option value="">All Subjects</option>
                         @foreach ($subjects as $subject)
@@ -34,7 +34,25 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
+                    <select name="university" class="form-select">
+                        <option value="">All Universities</option>
+                        @php
+                            $universities = [
+                                'Universiti Teknologi Malaysia',
+                                'Universiti Teknikal Malaysia Melaka',
+                                'Universiti Kebangsaan Malaysia',
+                            ];
+                        @endphp
+                        @foreach ($universities as $university)
+                            <option value="{{ $university }}"
+                                {{ request('university') == $university ? 'selected' : '' }}>
+                                {{ $university }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-1">
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="bi bi-funnel"></i> Filter
                     </button>

@@ -121,11 +121,11 @@
                 @enderror
             </div>
 
-            {{-- Remember Me --}}
+            {{-- Remember Me
             <div class="mb-3 form-check">
                 <input type="checkbox" name="remember" class="form-check-input" id="remember">
                 <label class="form-check-label" for="remember">Remember Me</label>
-            </div>
+            </div> --}}
 
             <button class="btn btn-primary w-100">Log In</button>
 

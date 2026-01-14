@@ -5,7 +5,7 @@
 <div class="text-center py-5">
 
     <h1 class="display-4 fw-bold mb-3">
-        Welcome to EduHive
+        Welcome to UniNote
     </h1>
 
     <p class="lead text-muted mb-4">

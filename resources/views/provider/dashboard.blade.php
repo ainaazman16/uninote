@@ -4,6 +4,29 @@
     <div class="container mt-4">
 
         <h2 class="fw-bold mb-4">Provider Dashboard</h2>
+        @if ($hasRejectedNotes)
+            <div id="rejectedNotesPopup" class="modal fade show" tabindex="-1"
+                style="display:block; background:rgba(0,0,0,0.3);">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title">Some of your notes were rejected</h5>
+                            <button type="button" class="btn-close"
+                                onclick="document.getElementById('rejectedNotesPopup').style.display='none';"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Please check your notes for details and possible reasons for rejection. You can re-upload or
+                                edit and resubmit them for approval.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{{ route('provider.notes.index') }}" class="btn btn-danger">View My Notes</a>
+                            <button type="button" class="btn btn-secondary"
+                                onclick="document.getElementById('rejectedNotesPopup').style.display='none';">Dismiss</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
         {{-- Role Indicator --}}
         <div class="alert alert-primary d-flex align-items-center justify-content-between rounded-3 mb-4">
             <div class="d-flex align-items-center gap-2">

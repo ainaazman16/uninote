@@ -13,7 +13,7 @@
                     {{ $notification->data['message'] }}
                 </p>
 
-                <a href="{{ route('admin.notes.pending') }}"
+                <a href="{{ route('admin.notes.index') }}"
                    class="btn btn-sm btn-primary">
                     Review Note
                 </a>

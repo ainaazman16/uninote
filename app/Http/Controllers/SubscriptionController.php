@@ -17,6 +17,7 @@ class SubscriptionController extends Controller
 {
     public function store(Provider $provider)
     {
+        abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot subscribe to providers.');
         $student = Auth::user();
         $price = 10; // example fixed price
 

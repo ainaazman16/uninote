@@ -6,6 +6,36 @@
             ← Back to Dashboard
         </a>
     </div>
+   <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Admin Guidelines
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Note Approval Guidelines</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>As an admin, you play a crucial role in maintaining the quality and integrity of the notes shared on our platform. Here are some guidelines to help you in your review process:</p>
+        <ul>
+            <li><strong>Thorough Review:</strong> Carefully read through each note's content, ensuring it is accurate, relevant, and free from plagiarism.</li>
+            <li><strong>Quality Standards:</strong> Ensure that notes meet our quality standards, including clarity, organization, and completeness.</li>
+            <li><strong>Feedback Provision:</strong> When rejecting notes, provide constructive feedback to help providers understand the reasons for rejection and how they can improve.</li>
+            <li><strong>Timely Responses:</strong> Aim to review notes promptly to facilitate a smooth experience for providers awaiting approval.</li>
+            <li><strong>Confidentiality:</strong> Maintain the confidentiality of the content you review and do not share it outside the platform.</li>
+        </ul>
+        <p>Your diligence and commitment to these guidelines help us maintain a high standard of educational resources for our users. Thank you for your valuable contribution!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
     <div class="container mt-4">
 
         <h2 class="fw-bold mb-4">Notes Approval</h2>

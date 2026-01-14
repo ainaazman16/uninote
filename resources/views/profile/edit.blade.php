@@ -15,7 +15,7 @@
                 {{-- Page Title --}}
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-bold text-dark">Account Settings</h2>
-                    <a href="{{ route('profile.show', auth()->user()) }}" class="btn btn-outline-secondary btn-sm">
+                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary btn-sm">
                         <i class="bi bi-arrow-left"></i> Back
                     </a>
                 </div>

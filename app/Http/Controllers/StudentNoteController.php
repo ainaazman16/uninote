@@ -33,10 +33,15 @@ class StudentNoteController extends Controller
                       });
                 });
             })
+            ->when($request->university, function ($query) use ($request) {
+                $query->whereHas('provider.user', function ($q) use ($request) {
+                    $q->where('university', $request->university);
+                });
+            })
             ->latest()
             ->get();
 
-            return view('student.notes.index' , compact('notes', 'subjects')); 
+        return view('student.notes.index', compact('notes', 'subjects'));
     }
 
     //View note details

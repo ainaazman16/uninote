@@ -6,6 +6,35 @@
             ← Back to Dashboard
         </a>
     </div>
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Admin Guidelines
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Withdrawal Approval Guidelines</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>As an admin, you play a crucial role in managing withdrawal requests from providers on our platform. Here are some guidelines to help you in your review and approval process:</p>
+        <ul></ul>
+            <li><strong>Verification of Details:</strong> Ensure that the bank details provided by the provider are accurate and match the information on file.</li>
+            <li><strong>Available Balance Check:</strong> Confirm that the provider has sufficient funds in their wallet to cover the withdrawal amount requested.</li>
+            <li><strong>Payment Proof:</strong> When approving a withdrawal, upload a valid payment proof (receipt, transaction ID, etc.) to maintain transparency and accountability.</li>
+            <li><strong>Timely Processing:</strong> Aim to process withdrawal requests promptly to ensure providers receive their funds without unnecessary delays.</li>
+            <li><strong>Rejection Protocol:</strong> If rejecting a withdrawal request, provide a clear and constructive reason for the rejection to help providers understand the issue.</li>
+            <li><strong>Confidentiality:</strong> Maintain the confidentiality of financial information and do not share it outside the platform.</li>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
     <div class="container mt-4">
 
         <h2 class="fw-bold mb-4">Withdrawal Requests</h2>

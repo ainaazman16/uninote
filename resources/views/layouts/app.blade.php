@@ -57,6 +57,25 @@
                 <a class="navbar-brand fw-bold fs-4 text-primary" href="{{ url('/') }}">
                     <i class="bi bi-journal-bookmark-fill me-2"></i>UniNote
                 </a>
+                
+                    <div class="collapse navbar-collapse" id="topNavbar">
+                    <ul class="navbar-nav me-auto gap-3">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('dashboard') }}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('student.notes.index') }}">Notes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('student.subscriptions.index') }}">Subscriptions</a>
+                        </li>
+                        {{-- <li class="nav-item">
+                            <a class="nav-link" href="{{ route('about') }}">About</a>
+                        </li> --}}
+                    </ul>
+                </div>
+                
+                
 
                 <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu">
                     <span class="navbar-toggler-icon"></span>

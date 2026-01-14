@@ -44,10 +44,10 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Wallet::create([
-            'user_id' => $user->id,
-            'balance' => 20 // free starting credits
-        ]);
+        // Wallet::create([
+        //     'user_id' => $user->id,
+        //     'balance' => 20 // free starting credits
+        // ]);
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));

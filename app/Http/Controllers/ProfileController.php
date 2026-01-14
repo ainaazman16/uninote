@@ -19,12 +19,14 @@ class ProfileController extends Controller
     // EDIT OWN PROFILE
     public function edit()
     {
+        abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot edit their profile.');
         return view('profile.edit');
     }
 
     // UPDATE OWN PROFILE
     public function update(Request $request)
     {
+        abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot edit their profile.');
         $user = Auth::user();
 
         $data = $request->validate([

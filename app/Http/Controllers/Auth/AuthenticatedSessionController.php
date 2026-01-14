@@ -35,22 +35,25 @@ class AuthenticatedSessionController extends Controller
                 'email' => __('auth.failed'),
             ]);
         }
-    
-        $request->session()->regenerate();
-    
-        // MOST IMPORTANT: disable intended redirect
-    $request->session()->forget('url.intended');
+
         $user = Auth::user();
-    
+        if ($user->status === 'suspended') {
+            Auth::logout();
+            return redirect()->route('login')->with('error', $user->suspend_reason ? 'Account suspended: ' . $user->suspend_reason . '. Please contact admin at admin@example.com.' : 'Your account has been suspended.');
+        }
+
+        $request->session()->regenerate();
+        $request->session()->forget('url.intended');
+
         if ($user->role === 'admin') {
             return redirect()->to('/admin/dashboard');
         }
-    
+
         if ($user->role === 'provider') {
-            return redirect()->to('/provider/dashboard'); // FORCE redirect
+            return redirect()->to('/provider/dashboard');
         }
-    
-        return redirect()->to('/dashboard'); // student default
+
+        return redirect()->to('/dashboard');
     }
     
 

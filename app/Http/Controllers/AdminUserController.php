@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 
 class AdminUserController extends Controller
+ 
 {
     public function index()
 {
@@ -31,16 +32,20 @@ public function toggleStatus(User $user)
 
     return back()->with('success', 'User status updated.');
 }
-    public function suspend(User $user)
-{
-    $user->update([
-        'status' => 'suspended'
-    ]);
+    public function suspend(Request $request, User $user)
+    {
+        $request->validate([
+            'suspend_reason' => 'required|string|max:1000',
+        ]);
+        $user->update([
+            'status' => 'suspended',
+            'suspend_reason' => $request->suspend_reason,
+        ]);
 
-    Mail::to($user->email)->send(new UserSuspendedMail($user));
+        Mail::to($user->email)->send(new UserSuspendedMail($user));
 
-    return back()->with('success', 'User has been suspended.');
-}
+        return back()->with('success', 'User has been suspended.');
+    }
 
 public function unsuspend(User $user)
 {
@@ -54,4 +59,18 @@ public function show(User $user)
 {
     return view('profile.show', compact('user'));
 }
+ public function universities()
+    {
+        $universities = User::whereNotNull('university')
+            ->select('university')
+            ->groupBy('university')
+            ->pluck('university');
+
+        $universityCounts = User::whereNotNull('university')
+            ->selectRaw('university, COUNT(*) as count')
+            ->groupBy('university')
+            ->pluck('count', 'university');
+
+        return view('admin.universities', compact('universities', 'universityCounts'));
+    }
 }

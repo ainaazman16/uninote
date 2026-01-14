@@ -35,6 +35,10 @@ class ProviderDashboardController extends Controller
             ? Note::where('provider_id', $providerId)->where('status', 'rejected')->count()
             : 0;
 
+        $hasRejectedNotes = $providerId
+            ? Note::where('provider_id', $providerId)->where('status', 'rejected')->exists()
+            : false;
+
         $totalDownloads = $providerId
             ? Note::where('provider_id', $providerId)->sum('download_count')
             : 0;
@@ -93,6 +97,7 @@ class ProviderDashboardController extends Controller
             'approvedNotes',
             'pendingNotes',
             'rejectedNotes',
+            'hasRejectedNotes',
             'totalDownloads',
             'walletBalance',
             'totalEarnings',

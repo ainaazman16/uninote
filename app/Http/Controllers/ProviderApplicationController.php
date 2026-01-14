@@ -13,6 +13,7 @@ class ProviderApplicationController extends Controller
 {
     public function showForm()
 {
+    abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot become providers.');
     $user = auth()->user();
 
     // Check profile completeness
@@ -41,6 +42,7 @@ class ProviderApplicationController extends Controller
 
     public function submit(Request $request)
     {
+        abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot become providers.');
         $request->validate([
             'reason' => 'required|string|max:500',
             'academic_strength' => 'required|string',

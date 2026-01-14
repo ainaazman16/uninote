@@ -171,6 +171,17 @@
                     </a>
                 </div>
             </div>
+            <!-- Universities Management -->
+            <div class="col-md-4">
+                <div class="card admin-card text-center">
+                    <div class="admin-icon">🏫</div>
+                    <h5 class="fw-bold">Universities Management</h5>
+                    <p class="text-muted">View and manage universities associated with users.</p>
+                    <a href="{{ route('admin.universities') }}" class="btn btn-primary w-100">
+                        Manage Universities
+                    </a>
+                </div>
+            </div>
 
         </div>
 

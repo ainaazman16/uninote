@@ -51,6 +51,11 @@ class AdminWalletTopupController extends Controller
             ]);
         });
 
+        // Redirect to student dashboard if the user is a student
+        $user = $topup->user;
+        if ($user && $user->role === 'student') {
+            return redirect()->route('dashboard')->with('success', 'Top-up approved and wallet updated.');
+        }
         return back()->with('success', 'Top-up approved and wallet updated.');
     }
 
@@ -70,6 +75,11 @@ class AdminWalletTopupController extends Controller
             'rejection_reason' => $validated['rejection_reason'],
         ]);
 
+        // Redirect to student dashboard if the user is a student
+        $user = $topup->user;
+        if ($user && $user->role === 'student') {
+            return redirect()->route('dashboard')->with('error', 'Top-up rejected.');
+        }
         return back()->with('success', 'Top-up rejected.');
     }
 }

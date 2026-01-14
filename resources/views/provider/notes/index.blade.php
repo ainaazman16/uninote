@@ -27,6 +27,7 @@
                         <th>Rejection Reason</th>
                         <th>File</th>
                         <th>Quiz</th>
+                        {{-- <th>Download Count</th> --}}
                         <th>Uploaded At</th>
                         <th>Actions</th>
                         <th>Analytics</th>
@@ -68,8 +69,8 @@
                                         Add Quiz
                                     </a>
                                 @endif
-
                             </td>
+                            {{-- <td>{{ $note->download_count ?? 0 }}</td> --}}
                             <td>{{ $note->created_at->format('d M Y, H:i') }}</td>
                             <td class="text-nowrap">
                                 <a href="{{ route('provider.notes.edit', $note->id) }}"
@@ -80,12 +81,10 @@
                                     class="d-inline" onsubmit="return confirm('Delete this note?')">
                                     @csrf
                                     @method('DELETE')
-
                                     <button class="btn btn-sm btn-outline-danger">
                                         Delete
                                     </button>
                                 </form>
-
                             </td>
                             <td>
                                 <a href="{{ route('provider.analytics.ratings', ['note_id' => $note->id]) }}"

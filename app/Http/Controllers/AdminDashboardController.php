@@ -66,6 +66,11 @@ class AdminDashboardController extends Controller
 
     $subscriptionCount = Subscription::count();
 
+    $totalUniversities = User::where('role', 'student')
+        ->whereNotNull('university')
+        ->distinct('university')
+        ->count('university');
+
      $pendingWithdrawals = Withdrawal::where('status', 'pending')->count();
 
     $pendingTopups = WalletTopup::where('status', 'pending')->count();
@@ -90,6 +95,8 @@ class AdminDashboardController extends Controller
         'pendingTopups',
         'pendingChats',
         'subscriptionCount',
+        'totalUniversities',
+        'totalUniversities',
         'userLabels',
         'userData',
         'months',
@@ -154,6 +161,13 @@ class AdminDashboardController extends Controller
 
     $subscriptionCount = Subscription::count();
 
+    $totalUniversities = User::where('role', 'student')
+        ->whereNotNull('university')
+        ->distinct('university')
+        ->count('university');
+    
+    
+
      $pendingWithdrawals = Withdrawal::where('status', 'pending')->count();
 
     $pendingTopups = WalletTopup::where('status', 'pending')->count();
@@ -178,6 +192,8 @@ class AdminDashboardController extends Controller
         'pendingTopups',
         'pendingChats',
         'subscriptionCount',
+        'totalUniversities',
+        'totalUniversities',
         'userLabels',
         'userData',
         'months',

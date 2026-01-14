@@ -11,6 +11,7 @@ class StudentChatController extends Controller
 {
     public function index()
     {
+        abort_if(auth()->user()->role === 'admin', 403, 'Admins cannot access chats.');
         $student = auth()->user();
 
         $chats = Chat::where('student_id', $student->id)

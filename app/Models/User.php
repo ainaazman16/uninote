@@ -20,17 +20,18 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'role',
-    'status',
-    'university',
-    'programme',
-    'year_of_study',
-    'bio',
-    'profile_photo',
-];
+        'name',
+        'email',
+        'password',
+        'role',
+        'status',
+        'university',
+        'programme',
+        'year_of_study',
+        'bio',
+        'profile_photo',
+        'suspend_reason',
+    ];
 
 
     /**
@@ -92,7 +93,5 @@ class User extends Authenticatable
                 $user->wallet()->create(['balance' => 0]);
             });
         }
-
-
 
 }
